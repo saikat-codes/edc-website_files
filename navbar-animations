@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umano — Navbar Recreation</title>
+<style>
+  /* ============================= RESET ============================= */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    background: #f4f3ef;
+    color: #14141f;
+    overflow-x: hidden;
+    cursor: none; /* replaced by custom cursor */
+  }
+  a { text-decoration: none; color: inherit; }
+  ul { list-style: none; }
+
+  /* ============================= CUSTOM CURSOR ============================= */
+  .cursor-ring, .cursor-dot {
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+  }
+  .cursor-ring {
+    width: 34px; height: 34px;
+    border: 1.5px solid #fb6a2e;
+    opacity: 0;
+    transition: opacity .25s ease, width .2s ease, height .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: #fb6a2e;
+    opacity: 0;
+    transition: opacity .25s ease, width .2s ease, height .2s ease;
+  }
+  .cursor-ring.active, .cursor-dot.active { opacity: 1; }
+  .cursor-ring.hovering {
+    width: 52px; height: 52px;
+    background: rgba(251,106,46,0.08);
+    border-color: rgba(251,106,46,0.55);
+  }
+  .cursor-dot.hovering { width: 6px; height: 6px; }
+
+  @media (hover: none), (pointer: coarse) {
+    .cursor-ring, .cursor-dot { display: none; }
+    body { cursor: auto; }
+  }
+
+  /* ============================= NAVBAR ============================= */
+  .navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #efefef;
+    border-radius: 999px;
+    padding: 10px 10px 10px 26px;
+    box-shadow: 0 10px 30px rgba(15,15,25,0.08), 0 2px 6px rgba(15,15,25,0.04);
+    transition: background .35s ease, padding .45s cubic-bezier(.65,0,.35,1), gap .45s cubic-bezier(.65,0,.35,1), box-shadow .35s ease;
+  }
+  .navbar.condensed {
+    padding: 10px 10px 10px 22px;
+    gap: 14px;
+  }
+  .navbar.on-dark {
+    background: #f6f6f3;
+    box-shadow: 0 14px 38px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  /* --- logo --- */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    color: #14141f;
+  }
+  .nav-logo .mark {
+    position: relative;
+    width: 14px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+  .nav-logo .mark::before,
+  .nav-logo .mark::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50% 50% 50% 0;
+    background: #14141f;
+  }
+  .nav-logo .mark::before {
+    top: 0;
+    transform: rotate(-45deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+  }
+  .nav-logo .mark::after {
+    bottom: 0;
+    left: 0;
+    width: 14px;
+    height: 8px;
+    border-radius: 0 0 8px 8px / 0 0 8px 8px;
+    background: #14141f;
+  }
+
+  /* --- center: links / dots swap zone --- */
+  .nav-center {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    max-width: 480px;
+    transition: max-width .45s cubic-bezier(.65,0,.35,1);
+  }
+  .navbar.condensed .nav-center { max-width: 70px; }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity .25s ease .1s;
+  }
+  .navbar.condensed .nav-links { opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+
+  .nav-links a {
+    position: relative;
+    font-weight: 600;
+    font-size: 15px;
+    color: #14141f;
+    padding: 4px 2px;
+    transition: color .3s ease;
+  }
+  .nav-links a.active { color: #fb6a2e; }
+  .nav-links a:hover { color: #fb6a2e; }
+
+  /* --- loading dots (shown while scrolling) --- */
+  .nav-dots {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity .2s ease;
+  }
+  .navbar.condensed .nav-dots { opacity: 1; transition: opacity .25s ease .15s; }
+
+  .nav-dots .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #c7c7c7;
+  }
+  .nav-dots .runner {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 18px;
+    height: 7px;
+    border-radius: 999px;
+    background: #14141f;
+    transform: translateY(-50%);
+    transition: left .28s cubic-bezier(.55,0,.45,1);
+  }
+
+  /* --- CTA button --- */
+  .nav-cta {
+    background: #fb6a2e;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
+    box-shadow: 0 6px 16px rgba(251,106,46,0.35);
+  }
+  .nav-cta:hover {
+    background: #ff7b41;
+    transform: translateY(-1px) scale(1.03);
+  }
+
+  /* ============================= LAYOUT / SECTIONS ============================= */
+  section {
+    position: relative;
+    padding: 160px 8vw 120px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .light { background: #f4f3ef; color: #14141f; }
+  .dark  { background: #0d1017; color: #f4f3ef; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fb6a2e;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(38px, 6vw, 76px);
+    font-weight: 800;
+    line-height: 1.05;
+    max-width: 900px;
+    letter-spacing: -1px;
+  }
+  h2 {
+    font-size: clamp(30px, 4.5vw, 54px);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 760px;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+  p.lead {
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 560px;
+    opacity: 0.75;
+    margin-top: 22px;
+  }
+
+  /* hero decoration */
+  .hero { overflow: hidden; }
+  .hero-circle {
+    position: absolute;
+    width: 640px;
+    height: 640px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ff8a52, #fb6a2e 55%, #e0501c 100%);
+    right: -180px;
+    bottom: -220px;
+    filter: blur(0px);
+    opacity: 0.95;
+  }
+  .hero-inner { position: relative; z-index: 2; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+    gap: 24px;
+    margin-top: 50px;
+    max-width: 1000px;
+  }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 28px;
+  }
+  .light .card { background: #fff; border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+  .card h3 { font-size: 19px; margin-bottom: 10px; font-weight: 700; }
+  .card p { font-size: 15px; opacity: 0.7; line-height: 1.55; }
+
+  .faq-item {
+    max-width: 720px;
+    padding: 26px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .faq-item h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .faq-item p { opacity: 0.65; line-height: 1.6; }
+
+  footer {
+    background: #0d1017;
+    color: #f4f3ef;
+    padding: 60px 8vw;
+    text-align: center;
+    opacity: 0.6;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============================= CUSTOM CURSOR ============================= -->
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- ============================= NAVBAR ============================= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo">
+      <span class="mark"></span>
+      <span>UMANO</span>
+    </div>
+
+    <div class="nav-center">
+      <div class="nav-links" id="navLinks">
+        <a href="#how-it-works" data-target="how-it-works">How it works</a>
+        <a href="#client-stories" data-target="client-stories">Client stories</a>
+        <a href="#pricing" data-target="pricing">Pricing</a>
+      </div>
+      <div class="nav-dots" id="navDots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="runner" id="runner"></span>
+      </div>
+    </div>
+
+    <a href="#" class="nav-cta">Book a call</a>
+  </nav>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="light hero" id="hero">
+    <div class="hero-circle"></div>
+    <div class="hero-inner">
+      <span class="eyebrow">Design partner, on demand</span>
+      <h1>Great design,<br>delivered like magic.</h1>
+      <p class="lead">Umano pairs you with a senior product design team so you can ship polished
+        interfaces without the overhead of hiring in-house.</p>
+    </div>
+  </section>
+
+  <!-- ============================= HOW IT WORKS ============================= -->
+  <section class="dark" id="how-it-works">
+    <span class="eyebrow">How it works</span>
+    <h2>Three steps to your next great interface.</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>01 — Tell us the brief</h3>
+        <p>Share what you need built, redesigned, or polished — as detailed or as loose as you like.</p>
+      </div>
+      <div class="card">
+        <h3>02 — We get to work</h3>
+        <p>A senior designer picks it up immediately and starts shipping drafts inside your board.</p>
+      </div>
+      <div class="card">
+        <h3>03 — Iterate until it's right</h3>
+        <p>Async feedback, unlimited revisions, fast turnarounds — no meetings required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= CLIENT STORIES ============================= -->
+  <section class="dark" id="client-stories">
+    <span class="eyebrow">Client stories</span>
+    <h2>Teams that ship faster with Umano.</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Nordform</h3>
+        <p>"We replaced two contractors with one Umano subscription and doubled our shipping speed."</p>
+      </div>
+      <div class="card">
+        <h3>Fieldnote</h3>
+        <p>"Our onboarding redesign went from a six week project to a nine day turnaround."</p>
+      </div>
+      <div class="card">
+        <h3>Vellum</h3>
+        <p>"Consistent quality, every single sprint. It genuinely feels like an in-house team."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PRICING ============================= -->
+  <section class="dark" id="pricing">
+    <span class="eyebrow">Pricing</span>
+    <h2>One flat subscription. Cancel anytime.</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Starter — $2,950/mo</h3>
+        <p>One request at a time, average 48 hour delivery. Perfect for early-stage teams.</p>
+      </div>
+      <div class="card">
+        <h3>Growth — $4,950/mo</h3>
+        <p>Two requests in parallel, dedicated designer, priority delivery windows.</p>
+      </div>
+      <div class="card">
+        <h3>Scale — Let's talk</h3>
+        <p>Multiple parallel tracks with a design lead managing your whole roadmap.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= FAQ ============================= -->
+  <section class="dark" id="faq">
+    <span class="eyebrow">FAQ</span>
+    <h2>Still have questions?</h2>
+    <div class="faq-item">
+      <h3>We already have a design team. Can you still help?</h3>
+      <p>Absolutely — most of our clients use Umano to absorb overflow work, cover for busy sprints,
+        or bring in a fresh perspective without expanding headcount.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What if I don't like the direction?</h3>
+      <p>Please reach out to us — we'll be happy to discuss it with you and find the right plan
+        or direction that fits what you're trying to build.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Can I pause or cancel my subscription?</h3>
+      <p>Yes, at any time. There are no long-term contracts and no cancellation fees.</p>
+    </div>
+  </section>
+
+  <footer>© 2026 Umano. All rights reserved.</footer>
+
+<script>
+  // ======================================================================
+  // CUSTOM CURSOR — a ring that follows quickly and a dot that trails
+  // with more delay, both smoothed via linear interpolation (lerp).
+  // ======================================================================
+  const ring = document.getElementById('cursorRing');
+  const dot  = document.getElementById('cursorDot');
+
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let ringX = mouseX, ringY = mouseY;
+  let dotX  = mouseX, dotY  = mouseY;
+  let cursorActive = false;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!cursorActive) {
+      cursorActive = true;
+      ring.classList.add('active');
+      dot.classList.add('active');
+      ringX = dotX = mouseX;
+      ringY = dotY = mouseY;
+    }
+  });
+  window.addEventListener('mouseleave', () => {
+    cursorActive = false;
+    ring.classList.remove('active');
+    dot.classList.remove('active');
+  });
+
+  function animateCursor() {
+    // ring follows fast, dot follows with a longer lag (spring-ish trail)
+    ringX += (mouseX - ringX) * 0.22;
+    ringY += (mouseY - ringY) * 0.22;
+    dotX  += (mouseX - dotX)  * 0.12;
+    dotY  += (mouseY - dotY)  * 0.12;
+
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%,-50%)`;
+    dot.style.transform  = `translate(${dotX}px, ${dotY}px) translate(-50%,-50%)`;
+
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // hover state on interactive elements
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.classList.add('hovering');
+      dot.classList.add('hovering');
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.classList.remove('hovering');
+      dot.classList.remove('hovering');
+    });
+  });
+
+  // ======================================================================
+  // NAVBAR — collapses into a "loading dots" indicator while the user is
+  // actively scrolling, then expands back showing the active section
+  // (scrollspy) once scrolling settles.
+  // ======================================================================
+  const navbar   = document.getElementById('navbar');
+  const navLinks = document.querySelectorAll('#navLinks a');
+  const runner   = document.getElementById('runner');
+  const sections = document.querySelectorAll('section[id]');
+  const heroSection = document.getElementById('hero');
+
+  let scrollTimeout = null;
+  let runnerInterval = null;
+  const dotPositions = [0, 16, 32, 48, 64]; // left offsets for the 5 dots (px)
+  let runnerStep = 0;
+
+  function startRunner() {
+    if (runnerInterval) return;
+    runnerStep = 0;
+    runnerInterval = setInterval(() => {
+      runner.style.left = dotPositions[runnerStep] + 'px';
+      runnerStep = (runnerStep + 1) % dotPositions.length;
+    }, 260);
+  }
+  function stopRunner() {
+    clearInterval(runnerInterval);
+    runnerInterval = null;
+  }
+
+  function updateActiveLink() {
+    const refPoint = window.scrollY + 130; // account for fixed navbar offset
+    let currentId = null;
+    sections.forEach(sec => {
+      if (sec.id === 'hero' || sec.id === 'faq') return;
+      if (refPoint >= sec.offsetTop) currentId = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.target === currentId);
+    });
+  }
+
+  function updateNavTheme() {
+    // switch navbar shadow style when it sits above a dark section
+    const refPoint = window.scrollY + 60;
+    let onDark = false;
+    sections.forEach(sec => {
+      const top = sec.offsetTop, bottom = top + sec.offsetHeight;
+      if (refPoint >= top && refPoint < bottom && sec.classList.contains('dark')) {
+        onDark = true;
+      }
+    });
+    navbar.classList.toggle('on-dark', onDark);
+  }
+
+  window.addEventListener('scroll', () => {
+    updateNavTheme();
+
+    if (!navbar.classList.contains('condensed')) {
+      navbar.classList.add('condensed');
+      startRunner();
+    }
+
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      navbar.classList.remove('condensed');
+      stopRunner();
+      updateActiveLink();
+    }, 220);
+  }, { passive: true });
+
+  // smooth scroll for nav links
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(a.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  updateActiveLink();
+  updateNavTheme();
+</script>
+</body>
+</html>na
