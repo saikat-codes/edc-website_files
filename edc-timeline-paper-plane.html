@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EDC Timeline — Paper Plane</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000000;
+  }
+
+  .timeline-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1536 / 380;
+    overflow: hidden;
+    background: #000000;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  /* subtle depth glows on the black backdrop */
+  .timeline-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 10%, rgba(255,255,255,0.08), transparent 60%),
+                radial-gradient(ellipse at 70% 0%, rgba(255,179,122,0.07), transparent 55%);
+    pointer-events: none;
+  }
+
+  .timeline-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* the hand-drawn string */
+  .timeline-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.85);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  /* ---------- PAPER PLANE ---------- */
+  .paper-plane {
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.45));
+  }
+  .plane-body {
+    fill: #FFB37A;
+    stroke: #F2934E;
+    stroke-width: 1;
+    stroke-linejoin: round;
+  }
+  .plane-fold {
+    fill: #E9863E;
+    stroke: none;
+  }
+
+  /* ---------- STOP PILLS (HTML overlay, so glassmorphism works) ---------- */
+  .stop-pill {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    white-space: nowrap;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1.2px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background 0.45s ease, border-color 0.45s ease,
+                box-shadow 0.45s ease, color 0.45s ease, transform 0.45s ease;
+  }
+
+  /* glassmorphic light-orange highlight, stays lit once the plane has passed through */
+  .stop-pill.active {
+    background: rgba(255, 179, 122, 0.28);
+    border-color: rgba(255, 179, 122, 0.85);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    box-shadow: 0 4px 20px rgba(255, 140, 60, 0.4);
+    color: #FFDDB8;
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="timeline-section" id="timelineSection">
+  <div class="timeline-bg"></div>
+
+  <svg class="timeline-svg" viewBox="0 0 1536 380" preserveAspectRatio="none"
+       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!-- ===== THE STRING PATH =====
+         Swap the "d" attribute for your site's real path data if it differs —
+         everything else (plane + highlight) keys off this path automatically. -->
+    <path id="timelinePath" class="timeline-path" d="
+      M -10,215
+      C 60,225 100,205 150,195
+      C 200,185 230,150 250,110
+      C 265,80 280,65 262,60
+      C 240,55 235,90 258,105
+      C 300,135 360,140 400,155
+      C 430,166 445,150 460,120
+      C 470,98 480,80 462,78
+      C 445,76 442,100 460,112
+      C 520,150 590,170 650,200
+      C 700,225 740,255 780,285
+      C 800,297 813,310 826,304
+      C 848,293 872,300 877,320
+      C 881,340 858,347 836,335
+      C 822,327 823,310 830,300
+      C 870,270 920,230 970,195
+      C 1010,167 1050,140 1090,110
+      C 1112,93 1128,78 1150,55
+      C 1162,42 1172,25 1158,20
+      C 1144,16 1136,35 1152,48
+      C 1178,68 1195,95 1175,120
+      C 1160,138 1145,150 1170,165
+      C 1210,188 1260,178 1300,190
+      C 1335,200 1360,215 1400,210
+      C 1440,206 1470,195 1546,205
+    "/>
+
+    <!-- ===== PAPER PLANE (Telegram-style silhouette) =====
+         Nose sits at local (0,0) pointing along +x; the JS-computed rotation
+         below keeps the nose aligned with the direction of travel. Body is a
+         light orange, with a darker orange folded underside for depth, just
+         like the classic paper-plane / Telegram send icon. -->
+    <g id="plane" class="paper-plane">
+      <path class="plane-body" d="M -28,12 L 0,0 L -28,-12 L -28,-3 L -8,0 L -28,3 Z"/>
+      <path class="plane-fold" d="M -28,-3 L -8,0 L -28,3 Z"/>
+    </g>
+
+  </svg>
+
+  <!-- Stop pills positioned in the same 1536x380 coordinate space as the SVG,
+       expressed as percentages so they track the path regardless of scaling. -->
+  <div class="stop-pill" id="pill-optimization" style="left:14.0%; top:46.8%;">Optimization</div>
+  <div class="stop-pill" id="pill-growth"       style="left:38.0%; top:50.0%;">Growth</div>
+  <div class="stop-pill" id="pill-savings"      style="left:54.0%; top:78.4%;">Savings</div>
+  <div class="stop-pill" id="pill-security"     style="left:73.1%; top:17.9%;">Security</div>
+  <div class="stop-pill" id="pill-creditcard"   style="left:87.1%; top:60.5%;">Credit card</div>
+</div>
+
+<script>
+  const path = document.getElementById('timelinePath');
+  const plane = document.getElementById('plane');
+  const totalLength = path.getTotalLength();
+  const DURATION = 10000; // ms per full loop
+  const PLANE_SCALE = 2.3;
+
+  // Stop centers in the SAME viewBox units (1536 x 380) used by the path/pills above.
+  const stops = [
+    { el: document.getElementById('pill-optimization'), x: 215,  y: 178, visited: false },
+    { el: document.getElementById('pill-growth'),       x: 583,  y: 190, visited: false },
+    { el: document.getElementById('pill-savings'),      x: 830,  y: 298, visited: false },
+    { el: document.getElementById('pill-security'),     x: 1123, y: 68,  visited: false },
+    { el: document.getElementById('pill-creditcard'),   x: 1338, y: 230, visited: false },
+  ];
+  const TRIGGER_RADIUS = 95; // how close (in viewBox units) the plane must get to light a stop up
+
+  function lerpAngle(a, b, t) {
+    let diff = ((b - a + 540) % 360) - 180;
+    return a + diff * t;
+  }
+
+  let start = null;
+  let prevElapsed = 0;
+  let currentAngle = null;
+
+  function frame(timestamp) {
+    if (start === null) start = timestamp;
+    const elapsed = (timestamp - start) % DURATION;
+
+    // loop has wrapped around — reset every pill back to unvisited
+    if (elapsed < prevElapsed) {
+      for (const stop of stops) {
+        stop.visited = false;
+        stop.el.classList.remove('active');
+      }
+    }
+    prevElapsed = elapsed;
+
+    const t = elapsed / DURATION;
+    const length = t * totalLength;
+
+    const point = path.getPointAtLength(length);
+    const ahead = path.getPointAtLength(Math.min(length + 1.5, totalLength));
+    const targetAngle = Math.atan2(ahead.y - point.y, ahead.x - point.x) * 180 / Math.PI;
+
+    // smooth out rotation so sharp turns in the string (e.g. near Savings) don't snap
+    currentAngle = currentAngle === null ? targetAngle : lerpAngle(currentAngle, targetAngle, 0.12);
+
+    plane.setAttribute(
+      'transform',
+      `translate(${point.x},${point.y}) rotate(${currentAngle}) scale(${PLANE_SCALE})`
+    );
+
+    for (const stop of stops) {
+      if (stop.visited) continue; // stays lit for the rest of this loop — no re-triggering
+      const dist = Math.hypot(point.x - stop.x, point.y - stop.y);
+      if (dist < TRIGGER_RADIUS) {
+        stop.visited = true;
+        stop.el.classList.add('active');
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>
