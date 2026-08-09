@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EDC Timeline — Paper Plane</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000000;
+  }
+
+  .timeline-section {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1536 / 480;
+    overflow: hidden;
+    background: #000000;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  .timeline-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* the hand-drawn string, with a soft glow like the reference */
+  .timeline-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.35));
+  }
+
+  .marker-ring {
+    fill: #000000;
+    stroke: #ffffff;
+    stroke-width: 1.6;
+  }
+
+  .marker-dot {
+    fill: #FF9F45;
+    filter: drop-shadow(0 0 4px rgba(255,159,69,0.9));
+  }
+
+  .stem-line {
+    stroke: #FF9F45;
+    stroke-width: 1.6;
+    filter: drop-shadow(0 0 3px rgba(255,159,69,0.6));
+  }
+
+  /* ---------- PAPER PLANE (3D-folded look, orange gradient) ---------- */
+  .paper-plane-top {
+    fill: #FFB067;
+    stroke: #D9722C;
+    stroke-width: 0.6;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+  }
+
+  .paper-plane-bottom {
+    fill: #E07C2E;
+    stroke: #C05F1E;
+    stroke-width: 0.6;
+    stroke-linejoin: round;
+  }
+
+  .paper-plane-crease {
+    stroke: #B85E1F;
+    stroke-width: 0.7;
+    opacity: 0.75;
+  }
+
+  .paper-plane-highlight {
+    fill: #FFD9AD;
+    opacity: 0.9;
+  }
+
+  /* ---------- STOP PILLS: dark fill, orange neon outline ---------- */
+  .stop-pill {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+    background: rgba(18, 12, 8, 0.95);
+    border: 1.6px solid rgba(255, 159, 69, 0.85);
+    box-shadow: 0 0 10px rgba(255, 159, 69, 0.45),
+                0 0 22px rgba(255, 120, 40, 0.22),
+                inset 0 0 8px rgba(255, 140, 60, 0.12);
+    color: #ffffff;
+    transition: box-shadow 0.5s ease, transform 0.45s ease, border-color 0.5s ease;
+  }
+
+  /* brief pulse while the plane is passing near this stop */
+  .stop-pill.boost {
+    border-color: rgba(255, 190, 120, 1);
+    box-shadow: 0 0 16px rgba(255, 170, 90, 0.75),
+                0 0 34px rgba(255, 130, 50, 0.4),
+                inset 0 0 10px rgba(255, 160, 90, 0.2);
+    transform: translate(-50%, -50%) scale(1.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="timeline-section" id="timelineSection">
+
+  <svg class="timeline-svg" viewBox="0 0 1536 480" preserveAspectRatio="none"
+       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <!-- ===== THE STRING PATH =====
+         Same wave/loop layout as before, flattened (reduced vertical
+         amplitude ~40%) so the motion reads calmer while still keeping
+         the loops and an up-and-down rhythm. -->
+    <path id="timelinePath" class="timeline-path" d="
+      M -20,265
+      C 40,238 120,226.2 170,216
+      C 190,178.2 130,142.2 200,134.4
+      C 262,128.4 302,158.4 262,188.4
+      C 236,202.8 222,208.8 215,213
+      C 262,224.4 300,214.8 340,208.8
+      C 400,202.8 460,208.8 522,213
+      C 600,220.2 660,242.4 720,260.4
+      C 760,268.8 792,273 814,275
+      C 852,265.2 902,217.2 952,175.2
+      C 1000,139.2 1050,120 1090,112.8
+      C 1130,106.8 1160,126 1140,151.2
+      C 1126,163.2 1130,166.8 1137,169
+      C 1180,181.2 1230,199.2 1280,208.2
+      C 1320,216 1345,220.2 1367,223
+      C 1400,228 1440,217.2 1480,220.2
+      C 1510,222 1530,224.4 1556,222
+    "/>
+
+    <!-- stems connecting each marker to its pill -->
+    <line class="stem-line" x1="215"  y1="213" x2="215"  y2="303"/>
+    <line class="stem-line" x1="522"  y1="213" x2="522"  y2="303"/>
+    <line class="stem-line" x1="814"  y1="275" x2="814"  y2="365"/>
+    <line class="stem-line" x1="1137" y1="169" x2="1137" y2="259"/>
+    <line class="stem-line" x1="1367" y1="223" x2="1367" y2="313"/>
+
+    <!-- markers: white ring with orange center dot -->
+    <g>
+      <circle class="marker-ring" cx="215"  cy="213" r="7"/>
+      <circle class="marker-dot"  cx="215"  cy="213" r="2.6"/>
+
+      <circle class="marker-ring" cx="522"  cy="213" r="7"/>
+      <circle class="marker-dot"  cx="522"  cy="213" r="2.6"/>
+
+      <circle class="marker-ring" cx="814"  cy="275" r="7"/>
+      <circle class="marker-dot"  cx="814"  cy="275" r="2.6"/>
+
+      <circle class="marker-ring" cx="1137" cy="169" r="7"/>
+      <circle class="marker-dot"  cx="1137" cy="169" r="2.6"/>
+
+      <circle class="marker-ring" cx="1367" cy="223" r="7"/>
+      <circle class="marker-dot"  cx="1367" cy="223" r="2.6"/>
+    </g>
+
+    <!-- ===== PAPER PLANE =====
+         A folded, 3D-looking dart in orange gradient tones, with crease
+         lines and a nose highlight for depth. Local origin is centered
+         on the shape so it sits on the path. -->
+    <g id="plane">
+      <path class="paper-plane-top" d="
+        M -34,-22
+        L 42,0
+        L -12,0
+        Z
+      "/>
+      <path class="paper-plane-bottom" d="
+        M -12,0
+        L 42,0
+        L -34,22
+        Z
+      "/>
+      <path class="paper-plane-highlight" d="
+        M 42,0
+        L 6,-4
+        L -12,0
+        L 6,4
+        Z
+      "/>
+      <line class="paper-plane-crease" x1="42" y1="0" x2="-30" y2="-18"/>
+      <line class="paper-plane-crease" x1="42" y1="0" x2="-30" y2="18"/>
+    </g>
+
+  </svg>
+
+  <!-- Stop pills positioned in the same 1536x480 coordinate space as the SVG,
+       expressed as percentages so they track the layout regardless of scaling. -->
+  <div class="stop-pill" id="pill-optimization" style="left:14.0%; top:63.1%;">Optimization</div>
+  <div class="stop-pill" id="pill-growth"       style="left:34.0%; top:63.1%;">Growth</div>
+  <div class="stop-pill" id="pill-savings"      style="left:53.0%; top:76.0%;">Savings</div>
+  <div class="stop-pill" id="pill-security"     style="left:74.0%; top:54.0%;">Security</div>
+  <div class="stop-pill" id="pill-creditcard"   style="left:89.0%; top:65.2%;">Credit card</div>
+</div>
+
+<script>
+  const path = document.getElementById('timelinePath');
+  const plane = document.getElementById('plane');
+  const totalLength = path.getTotalLength();
+  const DURATION = 16000; // ms per full loop
+  const PLANE_SCALE = 2.1;
+
+  // Stop centers in the SAME viewBox units (1536 x 480) used by the path/markers above.
+  const stops = [
+    { el: document.getElementById('pill-optimization'), x: 215,  y: 213 },
+    { el: document.getElementById('pill-growth'),       x: 522,  y: 213 },
+    { el: document.getElementById('pill-savings'),      x: 814,  y: 275 },
+    { el: document.getElementById('pill-security'),     x: 1137, y: 169 },
+    { el: document.getElementById('pill-creditcard'),   x: 1367, y: 223 },
+  ];
+  const TRIGGER_RADIUS = 110; // how close (in viewBox units) the plane must get to boost a pill
+
+  let start = null;
+  let smoothX = null, smoothY = null;   // trailing-smoothed position
+  let smoothAngle = 0;
+  let inited = false;
+
+  function angleLerp(current, target, amount) {
+    // shortest-path angle interpolation so rotation eases through bends
+    // instead of snapping across the 180/-180 seam
+    let delta = ((target - current + 540) % 360) - 180;
+    return current + delta * amount;
+  }
+
+  function frame(timestamp) {
+    if (start === null) start = timestamp;
+    const elapsed = (timestamp - start) % DURATION;
+    const t = elapsed / DURATION;
+    const length = t * totalLength;
+
+    // constant arc-length speed for even motion along the curve
+    const rawPoint = path.getPointAtLength(length);
+    const ahead = path.getPointAtLength(Math.min(length + 4, totalLength));
+    const targetAngle = Math.atan2(ahead.y - rawPoint.y, ahead.x - rawPoint.x) * 180 / Math.PI;
+
+    if (!inited) {
+      smoothX = rawPoint.x;
+      smoothY = rawPoint.y;
+      smoothAngle = targetAngle;
+      inited = true;
+    } else {
+      // light trailing-smoothing on both position and heading so motion
+      // reads as fluid rather than stepping frame-to-frame
+      smoothX += (rawPoint.x - smoothX) * 0.35;
+      smoothY += (rawPoint.y - smoothY) * 0.35;
+      smoothAngle = angleLerp(smoothAngle, targetAngle, 0.14);
+    }
+
+    plane.setAttribute(
+      'transform',
+      `translate(${smoothX},${smoothY}) rotate(${smoothAngle}) scale(${PLANE_SCALE})`
+    );
+
+    for (const stop of stops) {
+      const dist = Math.hypot(smoothX - stop.x, smoothY - stop.y);
+      stop.el.classList.toggle('boost', dist < TRIGGER_RADIUS);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>
