@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EDC — Footer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#0DC13E;
+    --green-bright:#2AFF4C;
+    --blue:#0975DC;
+    --yellow:#F6B407;
+    --orange:#EF5506;
+    --purple:#4B1572;
+    --cream:#F2E7E0;
+    --ink:#0A0A0A;
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:#eeeeee;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* filler section just so the footer reads like the bottom of a real page */
+  .page-filler{
+    min-height:38vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 24px;
+    text-align:center;
+  }
+  .page-filler h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(28px,5vw,56px);
+    line-height:1.05;
+    max-width:800px;
+    margin:0;
+    color:#111;
+  }
+  .page-filler p{
+    color:#666;
+    font-size:15px;
+    margin-top:14px;
+  }
+
+  /* ============ FOOTER ============ */
+  .edc-footer{
+    background:var(--green);
+    border-radius:36px;
+    margin:0 14px 14px;
+    padding:22px;
+    display:grid;
+    grid-template-columns: 0.98fr 3.75fr 5.35fr;
+    gap:18px;
+    min-height:820px;
+  }
+
+  a{ text-decoration:none; color:inherit; }
+  button{ font-family:inherit; cursor:pointer; border:none; }
+
+  /* shared hover lift, reused across every card in the footer */
+  .hover-lift{
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease, box-shadow .35s ease;
+  }
+  .hover-lift:hover{
+    transform:translateY(-3px);
+    filter:brightness(1.04);
+    box-shadow:0 14px 30px rgba(0,0,0,0.18);
+  }
+
+  /* ---------- COLUMN A : nav ---------- */
+  .col-nav{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    height:100%;
+  }
+  .logo-block{ padding: 4px 2px 6px; }
+  .logo{
+    font-family:'Archivo Black',sans-serif;
+    font-size:26px;
+    line-height:1;
+    letter-spacing:-0.5px;
+    color:var(--ink);
+  }
+  .logo .dot{ color:var(--ink); }
+  .tagline{
+    font-size:8.5px;
+    font-weight:700;
+    letter-spacing:0.6px;
+    margin-top:4px;
+    color:#0a3d1a;
+    text-transform:uppercase;
+  }
+
+  .nav-card{
+    border-radius:var(--radius-md);
+    padding:14px 14px 12px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+  .nav-card--blue{ background:var(--blue); color:#fff; flex:1.7; }
+  .nav-card--yellow{ background:var(--yellow); color:var(--ink); flex:1.05; }
+  .nav-card--orange{ background:var(--orange); color:#fff; flex:1.05; }
+  .nav-card--outline{
+    background:transparent;
+    border:1.5px solid rgba(10,10,10,0.85);
+    color:var(--ink);
+    flex:0.72;
+  }
+  .nav-card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    font-family:'Archivo Black',sans-serif;
+    font-size:13px;
+  }
+  .nav-card-top svg{ width:16px; height:16px; }
+  .nav-card-label{
+    font-family:'Archivo Black',sans-serif;
+    font-size:15px;
+    line-height:1.1;
+  }
+
+  .btn-join{
+    background:var(--purple);
+    color:#fff;
+    border-radius:999px;
+    padding:12px 10px;
+    font-family:'Archivo Black',sans-serif;
+    font-size:12.5px;
+    text-align:center;
+    width:100%;
+  }
+  .btn-lang{
+    background:var(--ink);
+    color:#fff;
+    border-radius:999px;
+    padding:9px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:12px;
+  }
+  .btn-lang svg{ width:15px; height:15px; stroke:#fff; }
+
+  .social-row{
+    display:flex;
+    gap:7px;
+  }
+  .social-btn{
+    background:var(--ink);
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .social-btn svg{ width:15px; height:15px; fill:#fff; }
+
+  /* ---------- COLUMN B : map + connect ---------- */
+  .col-map{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    height:100%;
+    min-width:0;
+  }
+
+  .map-card{
+    position:relative;
+    flex:1.55;
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    background:#07090a;
+    min-height:0;
+  }
+  .map-svg{ width:100%; height:100%; display:block; }
+
+  /* clean, solid India silhouette — no dot pattern */
+  .india-land{
+    fill:url(#landGrad);
+    stroke:#3fd67a;
+    stroke-width:1;
+    stroke-linejoin:round;
+    opacity:0.95;
+  }
+
+  .map-tooltip{
+    position:absolute;
+    left:56%;
+    top:34%;
+    transform:translate(-50%,0);
+    background:rgba(35,38,40,0.92);
+    color:#f2f2f2;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:12px;
+    padding:7px 13px;
+    border-radius:999px;
+    white-space:nowrap;
+    box-shadow:0 6px 18px rgba(0,0,0,0.35);
+    pointer-events:none;
+  }
+  .map-badge{
+    position:absolute;
+    left:14px;
+    bottom:14px;
+    font-family:'Inter',sans-serif;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:0.4px;
+    color:rgba(255,255,255,0.55);
+    text-transform:uppercase;
+  }
+
+  .col-map-bottom{
+    display:flex;
+    gap:12px;
+    flex:1;
+    min-height:0;
+  }
+  .connect-box{
+    background:var(--green-bright);
+    border-radius:var(--radius-lg);
+    flex:1.35;
+    padding:18px 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .connect-title{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(20px,2.1vw,26px);
+    line-height:1.05;
+    color:var(--ink);
+  }
+  .connect-socials{
+    display:flex;
+    gap:14px;
+  }
+  .connect-socials svg{
+    width:19px;
+    height:19px;
+    stroke:var(--ink);
+    fill:none;
+    stroke-width:1.6;
+  }
+  .connect-socials .filled-icon{ fill:var(--ink); stroke:none; }
+
+  .brand-card{
+    background:var(--cream);
+    border-radius:var(--radius-lg);
+    flex:1;
+    padding:16px 16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .brand-logo{
+    font-family:'Archivo Black',sans-serif;
+    font-size:19px;
+  }
+  .brand-contact{
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:11.5px;
+    line-height:1.9;
+  }
+  .brand-contact a{ display:block; color:var(--ink); }
+
+  /* ---------- COLUMN C : form ---------- */
+  .col-form{ height:100%; min-width:0; }
+  .form-card{
+    background:var(--cream);
+    border-radius:var(--radius-lg);
+    height:100%;
+    padding:26px 34px 30px;
+    display:flex;
+    flex-direction:column;
+  }
+  .contact-pill{
+    background:var(--cream);
+    border:1.5px solid var(--ink);
+    border-radius:999px;
+    padding:9px 22px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    align-self:flex-start;
+    margin-bottom:min(11vh,100px);
+  }
+  .form-heading{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(26px,3vw,40px);
+    line-height:1.08;
+    margin:0 0 14px;
+  }
+  .form-sub{
+    font-size:14px;
+    color:#3a3a3a;
+    margin:0 0 40px;
+  }
+  form{ display:flex; flex-direction:column; flex:1; }
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-bottom:30px;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1.4px solid rgba(10,10,10,0.75);
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    padding:4px 2px 8px;
+    color:var(--ink);
+  }
+  .field input::placeholder, .field textarea::placeholder{ color:#8c8c8c; }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--ink); }
+  .field.full{ margin-bottom:0; }
+  .field textarea{
+    border:1.4px solid rgba(10,10,10,0.75);
+    border-radius:10px;
+    padding:12px 14px;
+    resize:none;
+    height:112px;
+    font-size:13.5px;
+  }
+
+  .form-footer{
+    margin-top:44px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .checks{ display:flex; flex-direction:column; gap:9px; max-width:560px; }
+  .checks label{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+    font-size:11.5px;
+    line-height:1.4;
+    color:#222;
+  }
+  .checks input{ margin-top:2px; accent-color:var(--ink); width:14px; height:14px; flex-shrink:0; }
+
+  .send-btn{
+    background:var(--ink);
+    color:#fff;
+    border-radius:999px;
+    padding:15px 26px;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .send-btn svg{ width:14px; height:14px; stroke:#fff; }
+
+  /* ============ responsive ============ */
+  @media (max-width: 980px){
+    .edc-footer{
+      grid-template-columns:1fr;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+    .col-nav{ order:1; flex-direction:row; flex-wrap:wrap; }
+    .col-form{ order:2; }   /* "Any questions" card first */
+    .col-map{ order:3; }    /* map (+ connect/brand) comes after the form */
+
+    .logo-block{ width:100%; }
+    .nav-card{ flex:1 1 21%; min-height:120px; }
+    .btn-join, .btn-lang{ flex:1 1 100%; }
+    .map-card{ min-height:320px; }
+    .col-map-bottom{ flex-direction:column; }
+    .form-card{ padding:24px 20px; }
+    .form-row{ grid-template-columns:1fr; gap:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-filler">
+  <div>
+    <h1>Scroll down for the footer ↓</h1>
+    <p>(dummy content just so the footer sits at the bottom of a page, like it would on the real site)</p>
+  </div>
+</div>
+
+<footer class="edc-footer">
+
+  <!-- ---------------- COLUMN A ---------------- -->
+  <div class="col-nav">
+    <div class="logo-block">
+      <div class="logo">EDC<span class="dot">.</span></div>
+      <div class="tagline">Entrepreneurship Development Cell</div>
+    </div>
+
+    <a class="nav-card nav-card--blue hover-lift" href="#about">
+      <div class="nav-card-top">
+        <span>01</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </div>
+      <div class="nav-card-label">About Us</div>
+    </a>
+
+    <a class="nav-card nav-card--yellow hover-lift" href="#events">
+      <div class="nav-card-top">
+        <span>02</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </div>
+      <div class="nav-card-label">Our Events</div>
+    </a>
+
+    <a class="nav-card nav-card--orange hover-lift" href="#community">
+      <div class="nav-card-top">
+        <span>03</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </div>
+      <div class="nav-card-label">Community</div>
+    </a>
+
+    <a class="nav-card nav-card--outline hover-lift" href="#contact">
+      <div class="nav-card-top">
+        <span>04</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </div>
+      <div class="nav-card-label">Contact</div>
+    </a>
+
+    <button class="btn-join hover-lift">Join EDC</button>
+
+    <button class="btn-lang hover-lift">
+      EN
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>
+    </button>
+
+    <div class="social-row">
+      <a class="social-btn hover-lift" href="#" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 3 0 4.1.06 1.1.05 1.8.22 2.4.46.6.24 1.1.56 1.6 1.06.5.5.82 1 1.06 1.6.24.6.4 1.3.46 2.4.05 1.1.06 1.4.06 4.1s0 3-.06 4.1c-.05 1.1-.22 1.8-.46 2.4a4.3 4.3 0 0 1-1.06 1.6 4.3 4.3 0 0 1-1.6 1.06c-.6.24-1.3.4-2.4.46-1.1.05-1.4.06-4.1.06s-3 0-4.1-.06c-1.1-.05-1.8-.22-2.4-.46a4.3 4.3 0 0 1-1.6-1.06 4.3 4.3 0 0 1-1.06-1.6c-.24-.6-.4-1.3-.46-2.4C2.2 15 2.2 14.7 2.2 12s0-3 .06-4.1c.05-1.1.22-1.8.46-2.4.24-.6.56-1.1 1.06-1.6.5-.5 1-.82 1.6-1.06.6-.24 1.3-.4 2.4-.46C8.9 2.2 9.3 2.2 12 2.2Zm0 1.8c-2.66 0-2.97 0-4.02.06-.9.04-1.4.19-1.72.32-.43.17-.74.37-1.07.7-.33.33-.53.64-.7 1.07-.13.32-.28.82-.32 1.72C4.1 9.03 4.1 9.34 4.1 12s0 2.97.06 4.02c.04.9.19 1.4.32 1.72.17.43.37.74.7 1.07.33.33.64.53 1.07.7.32.13.82.28 1.72.32 1.05.05 1.36.06 4.02.06s2.97 0 4.02-.06c.9-.04 1.4-.19 1.72-.32.43-.17.74-.37 1.07-.7.33-.33.53-.64.7-1.07.13-.32.28-.82.32-1.72.05-1.05.06-1.36.06-4.02s0-2.97-.06-4.02c-.04-.9-.19-1.4-.32-1.72a2.9 2.9 0 0 0-.7-1.07 2.9 2.9 0 0 0-1.07-.7c-.32-.13-.82-.28-1.72-.32C14.97 4.1 14.66 4.1 12 4.1Zm0 3.4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 1.8a2.7 2.7 0 1 0 0 5.4 2.7 2.7 0 0 0 0-5.4Zm4.7-2.9a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg>
+      </a>
+      <a class="social-btn hover-lift" href="#" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/></svg>
+      </a>
+      <a class="social-btn hover-lift" href="#" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M16.6 2h-3v13.5a2.6 2.6 0 1 1-1.9-2.5V9.7a5.7 5.7 0 1 0 4.9 5.65V9.5c1.15.85 2.55 1.35 4.05 1.35V7.6c-1.6 0-2.95-.55-4.05-1.45-.9-.75-1.5-1.85-1.6-3.05Z" transform="translate(.3 .2)"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ---------------- COLUMN B ---------------- -->
+  <div class="col-map">
+    <div class="map-card hover-lift" id="mapCard">
+      <svg class="map-svg" id="mapSvg" viewBox="0 0 280 320" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#1f5c3d"/>
+            <stop offset="100%" stop-color="#123422"/>
+          </linearGradient>
+          <radialGradient id="pulseGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3aa0ff" stop-opacity="0.85"/>
+            <stop offset="70%" stop-color="#1f6fbf" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#1f6fbf" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- clean vector outline of India — replaces the old dotted grid -->
+        <path class="india-land" d="
+          M100,5
+          L130,10
+          L160,25
+          L185,20
+          L205,35
+          L215,45
+          L255,55
+          L270,90
+          L250,110
+          L215,95
+          L225,130
+          L205,150
+          L190,190
+          L175,230
+          L165,270
+          L140,310
+          L115,295
+          L95,260
+          L78,220
+          L68,180
+          L55,140
+          L35,120
+          L45,95
+          L60,80
+          L70,50
+          L85,25
+          Z
+        "/>
+
+        <ellipse class="pulse-ring" cx="158" cy="110" rx="8" ry="4" fill="url(#pulseGrad)"/>
+        <ellipse class="pulse-ring pulse-ring--2" cx="158" cy="110" rx="8" ry="4" fill="url(#pulseGrad)"/>
+
+        <circle cx="158" cy="110" r="2.6" fill="#eaf5ff"/>
+        <circle cx="158" cy="110" r="4.4" fill="none" stroke="#5fb4ff" stroke-width="0.8"/>
+      </svg>
+
+      <div class="map-tooltip">We are here</div>
+      <div class="map-badge">India</div>
+    </div>
+
+    <div class="col-map-bottom">
+      <div class="connect-box hover-lift">
+        <div class="connect-title">Let's<br/>Connect!</div>
+        <div class="connect-socials">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="0.9" class="filled-icon"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 0-10.4 8.9v-6.3H8.4V12h2.2V10c0-2.2 1.3-3.4 3.3-3.4.95 0 1.95.17 1.95.17v2.15h-1.1c-1.1 0-1.44.68-1.44 1.38V12h2.45l-.39 2.6h-2.06v6.3A9 9 0 0 0 21 12Z"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24"><path d="M15.6 3h-2.7v12.2a2.35 2.35 0 1 1-1.7-2.26v-2.6a5.15 5.15 0 1 0 4.4 5.1V8.6a7.2 7.2 0 0 0 3.65 1.2V7.1c-1.44 0-2.66-.5-3.65-1.3-.8-.68-1.35-1.67-1.44-2.75Z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path class="filled-icon" d="M7.5 9.8h2.4v7.4H7.5zM8.7 8.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zM11.4 9.8h2.3v1h.03c.32-.6 1.1-1.24 2.27-1.24 2.43 0 2.88 1.6 2.88 3.68v3.96h-2.4v-3.5c0-.84 0-1.9-1.17-1.9s-1.35.92-1.35 1.9v3.5h-2.4z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="brand-card hover-lift">
+        <div class="brand-logo">EDC<span class="dot">.</span></div>
+        <div class="brand-contact">
+          <a href="mailto:hello@edcindia.org">hello@edcindia.org</a>
+          <a href="tel:+919876543210">+91 98765 43210</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------- COLUMN C ---------------- -->
+  <div class="col-form">
+    <div class="form-card">
+      <button class="contact-pill">Contact</button>
+
+      <h2 class="form-heading">Any questions?<br/>We're here to answer!</h2>
+      <p class="form-sub">Complete the form and our team will contact you shortly.</p>
+
+      <form onsubmit="return false;">
+        <div class="form-row">
+          <div class="field"><label>Name *</label><input type="text" required/></div>
+          <div class="field"><label>Surname *</label><input type="text" required/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Email *</label><input type="email" required/></div>
+          <div class="field"><label>Phone *</label><input type="tel" required/></div>
+        </div>
+        <div class="field full">
+          <label>Message*</label>
+          <textarea placeholder="Leave your message here" required></textarea>
+        </div>
+
+        <div class="form-footer">
+          <div class="checks">
+            <label><input type="checkbox" required/> I have read and accept the Terms of Use and the Privacy Policy of EDC.</label>
+            <label><input type="checkbox"/> I would like to receive news and updates about EDC events and activities.</label>
+          </div>
+          <button class="send-btn hover-lift" type="submit">
+            Send
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</footer>
+
+<style>
+  .pulse-ring{
+    transform-origin: 158px 110px;
+    animation: pulse 2.6s ease-out infinite;
+  }
+  .pulse-ring--2{ animation-delay: 1.3s; }
+  @keyframes pulse{
+    0%   { transform: scale(0.35); opacity: 0.9; }
+    70%  { transform: scale(2.2);  opacity: 0; }
+    100% { transform: scale(2.2);  opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pulse-ring{ animation: none; opacity: 0.5; }
+  }
+</style>
+
+</body>
+</html>
