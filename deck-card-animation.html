@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Area of Expertise — Deck Card Scroll Effect</title>
+<style>
+  :root{
+    --blue:#0a0a0a;
+    --blue-deep:#000000;
+    --white:#ffffff;
+    --ink:#111111;
+    --accent:#f38b36;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:var(--blue);
+    color:var(--white);
+    font-family:'Helvetica Neue',Arial,Helvetica,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* ---------- letter dots (S C T P) top right, fade in ---------- */
+  .nav-letters{
+    position:fixed;
+    top:32px;
+    right:32px;
+    display:flex;
+    gap:8px;
+    z-index:45;
+    opacity:0;
+    transform:translateY(-6px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .nav-letters.show{opacity:1;transform:translateY(0);}
+  .nav-letters span{
+    width:30px;height:30px;
+    border:1px solid rgba(243,139,54,0.6);
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;
+    color:var(--accent);
+  }
+
+  /* ---------- scroll section ---------- */
+  .scroll-section{
+    position:relative;
+    height:380vh;
+  }
+  .sticky{
+    position:sticky;
+    top:0;
+    height:100vh;
+    width:100%;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  /* decorative swoosh */
+  .swoosh{
+    position:absolute;
+    top:14%;
+    left:0;
+    width:70%;
+    max-width:900px;
+    opacity:0;
+    transform:translateX(-40px);
+    transition:opacity .6s ease, transform .6s ease;
+    pointer-events:none;
+  }
+  .swoosh.show{opacity:1;transform:translateX(0);}
+
+  /* ---------- headings ---------- */
+  .heading-wrap{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+
+  .headline-big{
+    position:absolute;
+    left:50%;top:50%;
+    transform:translate(-50%,-50%);
+    font-size:min(9vw,120px);
+    font-weight:600;
+    letter-spacing:-1px;
+    white-space:nowrap;
+  }
+
+  .headline-small{
+    position:absolute;
+    left:32px;
+    top:32px;
+    font-size:clamp(34px,5.2vw,64px);
+    font-weight:600;
+    line-height:1.02;
+    letter-spacing:-1px;
+    margin:0;
+  }
+
+  .headline-small .row2{display:block;}
+
+  .tagline{
+    position:absolute;
+    top:76px;
+    right:32px;
+    max-width:260px;
+    text-align:right;
+    font-size:12px;
+    line-height:1.5;
+    font-weight:500;
+    letter-spacing:0.2px;
+    color:rgba(255,255,255,0.92);
+    opacity:0;
+    transition:opacity .5s ease;
+  }
+  .tagline.show{opacity:1;}
+
+  /* ---------- stage ---------- */
+  .stage{
+    position:relative;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:2400px;
+  }
+
+  .card{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:230px;
+    height:322px;
+    margin-left:-115px;
+    margin-top:-161px;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+  }
+
+  .face{
+    position:absolute;
+    inset:0;
+    border-radius:16px;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.45);
+  }
+
+  .face-back{
+    background:var(--blue);
+    border:2px solid #fff;
+  }
+  .face-back svg{width:100%;height:100%;display:block;}
+
+  .face-front{
+    background:#fff;
+    color:var(--ink);
+    transform:rotateY(180deg);
+    padding:22px 20px;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .front-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+  }
+  .front-title{
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:0.2px;
+  }
+  .badge{
+    width:30px;height:30px;
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .badge svg{width:100%;height:100%;}
+
+  .front-list{
+    margin-top:18px;
+    flex:1;
+  }
+  .front-list .item{
+    display:block;
+    position:relative;
+    font-size:12.5px;
+    font-weight:500;
+    padding-bottom:9px;
+    margin-bottom:9px;
+    border-bottom:1px dotted #d8d8d8;
+    color:#2b2b2b;
+  }
+  .front-list .item:last-child{border-bottom:none;}
+
+  .front-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    transform:rotate(180deg);
+  }
+
+  /* ---------- spacer copy below (for scroll context) ---------- */
+  .filler{
+    min-height:60vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0 24px;
+  }
+  .filler p{
+    max-width:520px;
+    font-size:14px;
+    line-height:1.7;
+    color:rgba(255,255,255,0.6);
+  }
+  .filler-top{padding-top:10vh;}
+
+  @media (max-width:640px){
+    .card{width:168px;height:236px;margin-left:-84px;margin-top:-118px;}
+    .headline-small{font-size:34px;}
+    .tagline{display:none;}
+    .front-title{font-size:15px;}
+    .front-list .item{font-size:11px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="nav-letters" id="navLetters">
+    <span>S</span><span>C</span><span>T</span><span>P</span>
+  </div>
+
+  <div class="filler filler-top">
+    <p>Scroll down — the deck flips over and the four expertise cards fan out.</p>
+  </div>
+
+  <section class="scroll-section" id="scrollSection">
+    <div class="sticky">
+
+      <svg class="swoosh" id="swoosh" viewBox="0 0 900 200" fill="none">
+        <path d="M0 140 C 220 160, 420 40, 640 30 C 760 24, 830 40, 900 5"
+              stroke="#f38b36" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+
+      <div class="heading-wrap">
+        <div class="headline-big" id="headlineBig">EXPERTISE</div>
+        <h2 class="headline-small" id="headlineSmall" style="opacity:0;">
+          <span class="row1">AREA OF</span>
+          <span class="row2">EXPERTISE</span>
+        </h2>
+        <div class="tagline" id="tagline">
+          LUSION IS A CREATIVE DEVELOPMENT STUDIO SPECIALISING IN
+          STRATEGY, CREATIVE, TECHNOLOGY, AND PRODUCTION.
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <!-- cards injected by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <div class="filler">
+    <p>Keep scrolling to continue past the expertise section.</p>
+  </div>
+
+<script>
+(function(){
+
+  /* ---------------- shared back-of-card artwork ---------------- */
+  const backSvgDefs = `
+    <svg viewBox="0 0 0 0" width="0" height="0" style="position:absolute">
+      <defs>
+        <symbol id="cardBackArt" viewBox="0 0 230 322">
+          <g stroke="#ffffff" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="10" y="10" width="210" height="302" rx="10"/>
+            <rect x="18" y="18" width="194" height="286" rx="7"/>
+
+            <!-- corner fan arcs -->
+            <path d="M18 46 A28 28 0 0 1 46 18"/>
+            <path d="M212 46 A28 28 0 0 0 184 18"/>
+            <path d="M18 276 A28 28 0 0 0 46 304"/>
+            <path d="M212 276 A28 28 0 0 1 184 304"/>
+
+            <!-- diagonals to center -->
+            <line x1="46" y1="18" x2="115" y2="161"/>
+            <line x1="184" y1="18" x2="115" y2="161"/>
+            <line x1="46" y1="304" x2="115" y2="161"/>
+            <line x1="184" y1="304" x2="115" y2="161"/>
+
+            <!-- vertical spine -->
+            <line x1="115" y1="34" x2="115" y2="118" stroke-dasharray="1 7"/>
+            <line x1="115" y1="204" x2="115" y2="288" stroke-dasharray="1 7"/>
+
+            <!-- top / bottom beads -->
+            <circle cx="115" cy="34" r="10"/>
+            <circle cx="115" cy="288" r="10"/>
+
+            <!-- side dot rails -->
+            <g fill="#ffffff" stroke="none">
+              <circle cx="27" cy="70" r="2.4"/>
+              <circle cx="27" cy="90" r="2.4"/>
+              <circle cx="27" cy="110" r="2.4"/>
+              <circle cx="203" cy="70" r="2.4"/>
+              <circle cx="203" cy="90" r="2.4"/>
+              <circle cx="203" cy="110" r="2.4"/>
+              <circle cx="27" cy="212" r="2.4"/>
+              <circle cx="27" cy="232" r="2.4"/>
+              <circle cx="27" cy="252" r="2.4"/>
+              <circle cx="203" cy="212" r="2.4"/>
+              <circle cx="203" cy="232" r="2.4"/>
+              <circle cx="203" cy="252" r="2.4"/>
+            </g>
+
+            <!-- left / right triangle arrows -->
+            <path d="M70 145 L88 161 L70 177 Z" stroke-linejoin="round"/>
+            <path d="M160 145 L142 161 L160 177 Z" stroke-linejoin="round"/>
+
+            <!-- small tick marks -->
+            <line x1="80" y1="120" x2="92" y2="132" stroke-width="2.4"/>
+            <line x1="150" y1="120" x2="138" y2="132" stroke-width="2.4"/>
+
+            <!-- central petal / diamond -->
+            <path d="M115 118 C132 118 138 132 152 132 C152 148 138 152 138 161
+                     C138 174 152 178 152 194 C138 194 132 208 115 208
+                     C98 208 92 194 78 194 C78 178 92 174 92 161
+                     C92 152 78 148 78 132 C92 132 98 118 115 118 Z"
+                  fill="#0a0a0a"/>
+            <circle cx="115" cy="161" r="22" fill="#0a0a0a" stroke="#f38b36" stroke-width="1.4"/>
+          </g>
+          <!-- logo placeholder — swap the href below for the real logo image -->
+          <clipPath id="logoClip">
+            <circle cx="115" cy="161" r="20"/>
+          </clipPath>
+          <image href="logo-placeholder.png" x="95" y="141" width="40" height="40" clip-path="url(#logoClip)" preserveAspectRatio="xMidYMid slice"/>
+        </symbol>
+      </defs>
+    </svg>
+  `;
+  document.body.insertAdjacentHTML('afterbegin', backSvgDefs);
+
+  /* ---------------- badge icon paths (S C T P) ---------------- */
+  const badges = {
+    S: `<rect x="1" y="1" width="12" height="12" fill="#f38b36"/><rect x="15" y="15" width="12" height="12" fill="#f38b36"/><rect x="15" y="1" width="12" height="12" fill="#111111"/><rect x="1" y="15" width="12" height="12" fill="#111111"/>`,
+    C: `<path d="M14 2 A12 12 0 0 0 14 26" stroke="#f38b36" stroke-width="4" fill="none"/><path d="M20 8 A7 7 0 0 0 20 20" stroke="#111111" stroke-width="4" fill="none"/>`,
+    T: `<rect x="2" y="2" width="24" height="6" fill="#111111"/><rect x="11" y="8" width="6" height="18" fill="#f38b36"/>`,
+    P: `<rect x="4" y="2" width="6" height="24" fill="#111111"/><path d="M10 3 L24 8 L10 15 Z" fill="#f38b36"/>`
+  };
+  function badgeSvg(letter){
+    return `<svg viewBox="0 0 28 28">${badges[letter]}</svg>`;
+  }
+
+  /* ---------------- card content data ---------------- */
+  const cardsData = [
+    { letter:'S', title:'STRATEGY', items:['Digital Experience Strategy','Technology Strategy','Creative Direction','Discovery','Research'] },
+    { letter:'C', title:'CREATIVE', items:['Art Direction','UX/UI Design','Motion Design','Interactive Design','Illustration'] },
+    { letter:'T', title:'TECH', items:['WebGL Development','Front End Development','Unity/Unreal','Interactive Installations','AR and VR Experiences'] },
+    { letter:'P', title:'PRODUCTION', items:['Procedural Modeling','3D Asset Creation','3D Optimization','Animation','3D Pipeline Development'] }
+  ];
+
+  const stage = document.getElementById('stage');
+
+  cardsData.forEach((data, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.index = i;
+
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="face face-back">
+          <svg viewBox="0 0 230 322"><use href="#cardBackArt"/></svg>
+        </div>
+        <div class="face face-front">
+          <div class="front-top">
+            <div class="front-title">${data.title}</div>
+            <div class="badge">${badgeSvg(data.letter)}</div>
+          </div>
+          <div class="front-list">
+            ${data.items.map(it => `<span class="item">${it}</span>`).join('')}
+          </div>
+          <div class="front-bottom">
+            <div class="badge">${badgeSvg(data.letter)}</div>
+            <div class="front-title" style="font-size:15px;">${data.title}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    stage.appendChild(card);
+  });
+
+  const cardEls = Array.from(stage.querySelectorAll('.card'));
+
+  /* ---------------- animation targets ---------------- */
+  const stackState  = [
+    { x:-5, y:-9, rot:-6 },
+    { x:-2, y:-4, rot:-2 },
+    { x:2,  y:0,  rot:2  },
+    { x:6,  y:5,  rot:6  }
+  ];
+  const spreadRot = [-6, -2, 2, 6];
+  let spreadState = [];
+
+  function computeSpread(){
+    const cardW = window.innerWidth <= 640 ? 168 : 230;
+    /* keep 4 cards comfortably inside the viewport with a little overlap */
+    const maxSpan = Math.min(window.innerWidth * 0.92, cardW * 4.35);
+    const step = maxSpan / 3.6;
+    const positions = [-1.5, -0.5, 0.5, 1.5].map(m => m * step);
+    spreadState = positions.map((x,i) => ({ x, y:0, rot:spreadRot[i] }));
+  }
+  computeSpread();
+
+  function lerp(a,b,t){ return a + (b-a)*t; }
+  function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+  function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+  const section = document.getElementById('scrollSection');
+  const headlineBig = document.getElementById('headlineBig');
+  const headlineSmall = document.getElementById('headlineSmall');
+  const tagline = document.getElementById('tagline');
+  const navLetters = document.getElementById('navLetters');
+  const swoosh = document.getElementById('swoosh');
+
+  let ticking = false;
+  const startTime = performance.now();
+  const hoverPhase = [0, 1.3, 2.6, 3.9];
+
+  function update(){
+    ticking = false;
+
+    const now = performance.now();
+    const t = (now - startTime) / 1000;
+
+    const rect = section.getBoundingClientRect();
+    const scrollable = rect.height - window.innerHeight;
+    const raw = scrollable > 0 ? (-rect.top) / scrollable : 0;
+    const progress = clamp(raw, 0, 1);
+
+    /* per-card staggered local progress */
+    const delayStep = 0.12;
+    const duration = 0.62;
+
+    cardEls.forEach((card, i) => {
+      const delay = i * delayStep;
+      let local = (progress - delay) / duration;
+      local = clamp(local, 0, 1);
+      const eased = easeInOutCubic(local);
+
+      const s0 = stackState[i];
+      const s1 = spreadState[i];
+
+      const x = lerp(s0.x, s1.x, eased);
+      const y = lerp(s0.y, s1.y, eased);
+      const rot = lerp(s0.rot, s1.rot, eased);
+      const rotY = lerp(0, 180, eased);
+
+      /* gentle idle hover once a card has fully settled into its spread position */
+      const hoverAmount = eased; // fades in smoothly as the card arrives, no pop
+      const phase = hoverPhase[i];
+      const hoverY = Math.sin(t * 0.9 + phase) * 7 * hoverAmount;
+      const hoverRot = Math.sin(t * 0.7 + phase) * 1.1 * hoverAmount;
+
+      card.style.zIndex = 10 + i;
+      card.style.transform = `translate(${x}px, ${y + hoverY}px) rotate(${rot + hoverRot}deg)`;
+      card.querySelector('.card-inner').style.transform = `rotateY(${rotY}deg)`;
+    });
+
+    /* heading crossfade (sequential, not overlapping) */
+    const bigOpacity = clamp(1 - progress / 0.14, 0, 1);
+    const bigScale = lerp(1, 0.86, clamp(progress/0.14,0,1));
+    headlineBig.style.opacity = bigOpacity;
+    headlineBig.style.transform = `translate(-50%,-50%) scale(${bigScale})`;
+
+    const smallT = clamp((progress - 0.22) / 0.2, 0, 1);
+    headlineSmall.style.opacity = smallT;
+    headlineSmall.style.transform = `translateY(${lerp(14,0,smallT)}px)`;
+
+    if(progress > 0.26){ tagline.classList.add('show'); navLetters.classList.add('show'); }
+    else { tagline.classList.remove('show'); navLetters.classList.remove('show'); }
+
+    if(progress > 0.55){ swoosh.classList.add('show'); }
+    else { swoosh.classList.remove('show'); }
+
+    requestAnimationFrame(update);
+  }
+
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', () => { computeSpread(); });
+  requestAnimationFrame(update);
+
+})();
+</script>
+</body>
+</html>
