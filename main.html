@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EDC | NIT Durgapur — Entrepreneurship Development Cell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Brand palette: primary orange, black, and blue */
+    --brand-orange:#f38b36; /* primary accent */
+    --brand-blue:#007bff; /* secondary accent */
+    --brand-black:#000000;
+
+    /* Backwards-compatible tokens (mapped to new brand) */
+    --green:var(--brand-orange);
+    --green-bright:#ff9c57; /* lighter orange for subtle highlights */
+    --green-deep:var(--brand-black);
+    --blue:var(--brand-blue);
+    --yellow:#e6ac00;
+    --orange:#e24b00;
+    --purple:var(--brand-blue);
+    --cream:#F6EEE6;
+    --ink:var(--brand-black);
+    --paper:#F7F4EF;
+    --muted:rgba(244,241,234,0.56);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;font-size:16px;-webkit-font-smoothing:antialiased;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    line-height:1.45;
+    overflow-x:hidden;
+  }
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;height:auto;}
+  ::selection{background:var(--green);color:#000;}
+  .disp{font-family:'Archivo Black',sans-serif;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--green-bright);margin-bottom:14px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--green-bright);}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 28px;}
+  section{position:relative;padding-top:20px;padding-bottom:20px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-weight:700;font-size:14px;letter-spacing:0.2px;
+    padding:12px 20px;border-radius:12px;border:0;
+    transition:transform .22s ease, box-shadow .18s ease, background .18s ease;
+    cursor:pointer;background:transparent;
+  }
+  .btn-primary{background:var(--green);color:#07220f;box-shadow:0 6px 18px rgba(4,20,8,0.18);} 
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(4,20,8,0.22);} 
+  .btn-ghost{border:1px solid rgba(244,241,234,0.12);color:var(--cream);background:transparent;padding:11px 18px;}
+  .btn-ghost:hover{background:rgba(255,255,255,0.03);}
+
+  /* ============================= CUSTOM CURSOR ============================= */
+  .cursor-ring,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;border-radius:50%;transform:translate(-50%,-50%);will-change:transform;}
+  .cursor-ring{width:28px;height:28px;border:1px solid rgba(243,139,54,0.95);opacity:0;transition:opacity .25s ease,width .18s ease,height .18s ease,border-color .2s ease,background .2s ease;}
+  .cursor-dot{width:6px;height:6px;background:var(--green-bright);opacity:0;transition:opacity .25s ease,width .2s ease,height .2s ease;}
+  .cursor-ring.active,.cursor-dot.active{opacity:1;}
+  .cursor-ring.hovering{width:44px;height:44px;background:rgba(243,139,54,0.06);border-color:rgba(243,139,54,0.8);} 
+  @media (hover:none),(pointer:coarse){.cursor-ring,.cursor-dot{display:none;}body{cursor:auto;}}
+
+  /* ============================= NAVBAR ============================= */
+  .navbar{
+    position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:1000;
+    display:flex;align-items:center;gap:16px;
+    background:rgba(244,241,234,0.94);
+    border-radius:14px;padding:10px 16px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.24);
+    transition:padding .28s ease, gap .28s ease;
+    max-width:calc(100% - 32px);
+  }
+  .navbar.condensed{padding:8px 12px;gap:10px;}
+  .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Archivo Black',sans-serif;font-size:15px;color:var(--ink);white-space:nowrap;}
+  .nav-logo .mark{width:28px;height:28px;border-radius:6px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#07140a;font-size:12px;font-weight:900;}
+  .nav-center{position:relative;display:flex;align-items:center;overflow:hidden;max-width:520px;transition:max-width .36s ease;}
+  .navbar.condensed .nav-center{max-width:64px;}
+  .nav-links{display:flex;align-items:center;gap:22px;white-space:nowrap;opacity:1;transition:opacity .18s ease .06s;}
+  .navbar.condensed .nav-links{opacity:0;pointer-events:none;}
+  .nav-links a{position:relative;font-weight:700;font-size:13px;color:#1b1b1b;padding:6px 2px;transition:color .2s ease;}
+  .nav-links a:hover, .nav-links a.active{color:var(--green-deep);} 
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:3px;background:var(--green);transition:width .26s ease;}
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .nav-dots{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:6px;opacity:0;transition:opacity .18s ease;}
+  .navbar.condensed .nav-dots{opacity:1;}
+  .nav-dots .dot{width:6px;height:6px;border-radius:6px;background:#cfcac0;}
+  .nav-cta{background:var(--ink);color:#fff;font-weight:800;font-size:13px;padding:9px 18px;border-radius:12px;white-space:nowrap;transition:transform .18s ease, background .18s ease;}
+  .nav-cta:hover{background:var(--green-deep);transform:translateY(-1px);} 
+  @media (max-width:900px){ .nav-links{display:none;} .nav-center{display:none;} }
+
+  /* ============================= HERO ============================= */
+  .hero{
+    min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:140px 0 24px;overflow:hidden;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%), var(--ink);
+  }
+  .hero-grid{position:absolute;inset:0;opacity:0.06;background-image:linear-gradient(rgba(244,241,234,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(244,241,234,0.03) 1px,transparent 1px);background-size:64px 64px;}
+  .hero-inner{position:relative;z-index:2;padding-bottom:46px}
+  .hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:36px;flex-wrap:wrap;}
+  .hero-copy{max-width:720px}
+  .hero h1{font-family:'Archivo Black',sans-serif;font-size:clamp(34px,5.2vw,72px);line-height:1.02;letter-spacing:-1px;color:var(--cream);margin:0}
+  .hero h1 .accent{color:var(--green-bright)}
+  .hero-sub{font-size:16px;line-height:1.65;color:var(--muted);max-width:520px;margin-top:18px}
+  .hero-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+
+  .hero-stats{display:flex;gap:28px;padding-bottom:6px}
+  .hero-stats .stat b{font-family:'Archivo Black',sans-serif;font-size:26px;color:var(--green-bright);display:block}
+  .hero-stats .stat span{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:rgba(244,241,234,0.46)}
+
+  /* photo collage strip */
+  .hero-collage{position:relative;margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(244,241,234,0.06)}
+  .collage-cell{position:relative;aspect-ratio:3/4;overflow:hidden;border-right:1px solid rgba(244,241,234,0.06);border-radius:6px}
+  .collage-cell:last-child{border-right:none}
+  .collage-cell img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.14) brightness(0.82);transition:filter .45s ease, transform .45s ease}
+  .collage-cell:hover img{filter:grayscale(0) brightness(0.95);transform:scale(1.04)}
+  .collage-cell::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%, rgba(0,0,0,0.35) 100%);}
+  .collage-tag{position:absolute;left:12px;bottom:12px;font-size:12px;font-weight:700;color:var(--cream);z-index:2}
+  @media (max-width:800px){ .hero-collage{grid-template-columns:repeat(2,1fr)} }
+
+  /* ============================= MARQUEE ============================= */
+  .marquee{background:var(--green-deep);padding:12px 0;overflow:hidden;white-space:nowrap}
+  .marquee-track{display:inline-flex;animation:scroll-left 36s linear infinite}
+  .marquee span{font-family:'Archivo Black',sans-serif;font-size:14px;color:var(--cream);padding:0 22px;display:inline-flex;align-items:center;gap:18px;text-transform:uppercase;letter-spacing:0.4px}
+  .marquee span::after{content:"•";font-size:8px;opacity:0.45}
+  @keyframes scroll-left{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+  /* ============================= ABOUT ============================= */
+  .about{background:var(--paper);color:var(--ink);padding:100px 0}
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:48px;align-items:start}
+  .about h2{font-family:'Archivo Black',sans-serif;font-size:clamp(28px,3.4vw,44px);line-height:1.06}
+  .about-lead{font-size:16px;line-height:1.6;color:#3c3c3c;margin-top:18px;max-width:520px}
+  .about-list{display:flex;flex-direction:column;gap:0;margin-top:12px}
+  .about-row{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid rgba(10,10,10,0.06)}
+  .about-row .num{font-family:'Archivo Black',sans-serif;font-size:13px;color:var(--green-deep)}
+  .about-row h3{font-size:18px;font-weight:800;flex:1}
+  .about-row p{font-size:14px;color:#555;max-width:420px;line-height:1.6}
+  @media (max-width:900px){ .about-grid{grid-template-columns:1fr} .about-row{flex-direction:column;gap:8px} }
+
+  /* ============================= DECK / PROGRAMS ============================= */
+  .programs{background:var(--ink)}
+  .scroll-section{position:relative;height:360vh}
+  .sticky{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+  .heading-wrap{position:absolute;inset:0;pointer-events:none;padding:72px 28px 0}
+  .headline-big{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);font-family:'Archivo Black',sans-serif;font-size:min(9.2vw,110px);color:rgba(244,241,234,0.04);white-space:nowrap}
+  .headline-small{position:absolute;left:32px;top:70px;font-family:'Archivo Black',sans-serif;font-size:clamp(28px,4.2vw,52px);line-height:1.02;max-width:560px;color:var(--cream)}
+  .tagline{position:absolute;top:96px;right:32px;max-width:320px;text-align:right;font-size:13px;line-height:1.5;font-weight:700;color:rgba(244,241,234,0.6);opacity:0;transition:opacity .38s ease}
+  .tagline.show{opacity:1}
+  .stage{position:relative;flex:1;display:flex;align-items:center;justify-content:center;perspective:2000px}
+  .card{position:absolute;left:50%;top:50%;width:230px;height:322px;margin-left:-115px;margin-top:-161px;transform-style:preserve-3d}
+  .card-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d}
+  .card, .card-inner{will-change:transform}
+  .face{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;box-shadow:0 18px 36px -18px rgba(0,0,0,0.45)}
+  .face-back{background:linear-gradient(155deg,#071018,var(--ink) 70%);border:1px solid rgba(243,139,54,0.10);display:flex;align-items:center;justify-content:center}
+  .face-back svg{width:100%;height:100%;display:block}
+  .face-back .glyph{font-family:'Archivo Black',sans-serif;font-size:64px;color:rgba(243,139,54,0.12)}
+  .face-front{background:var(--paper);color:var(--ink);transform:rotateY(180deg);padding:20px 18px;display:flex;flex-direction:column}
+  .front-top{display:flex;align-items:flex-start;justify-content:space-between}
+  .front-title{font-family:'Archivo Black',sans-serif;font-size:15px}
+  .badge{width:34px;height:34px;border-radius:8px;background:var(--brand-orange);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;color:#07140a;font-size:13px}
+  .front-list{margin-top:16px;flex:1}
+  .front-list .item{display:block;position:relative;font-size:13px;font-weight:700;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);color:#2b2b2b}
+  .front-list .item:last-child{border-bottom:none}
+  .front-bottom{display:flex;align-items:center;justify-content:space-between;transform:rotate(180deg)}
+  @media (max-width:640px){ .card{width:172px;height:240px;margin-left:-86px;margin-top:-120px} .headline-small{font-size:32px} .tagline{display:none} }
+
+  /* ============================= JOURNEY / TIMELINE ============================= */
+  .journey{background:#000;padding:90px 0 60px}
+  .journey-head{padding:0 28px;margin-bottom:16px}
+  .journey-head h2{font-family:'Archivo Black',sans-serif;font-size:clamp(26px,3.4vw,40px);color:var(--cream)}
+  .journey-head p{color:rgba(244,241,234,0.56);font-size:15px;margin-top:10px;max-width:520px}
+  .timeline-section{position:relative;width:100%;aspect-ratio:1536/480;overflow:hidden;background:#000}
+  .timeline-svg{position:absolute;inset:0;width:100%;height:100%}
+  .timeline-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 10%, rgba(255,255,255,0.03), transparent 60%),radial-gradient(ellipse at 70% 0%, rgba(255,140,60,0.04), transparent 55%);pointer-events:none}
+  .paper-plane{filter:drop-shadow(0 3px 6px rgba(0,0,0,0.5));}
+  .timeline-svg #plane{will-change:transform}
+  .timeline-path{fill:none;stroke:rgba(244,241,234,0.78);stroke-width:2;stroke-linecap:round}
+  .marker-ring{fill:#000;stroke:var(--cream);stroke-width:1.2}
+  .marker-dot{fill:var(--green-bright)}
+  .stem-line{stroke:var(--brand-blue);stroke-width:1.2}
+  .paper-plane-top{fill:var(--brand-blue);stroke:rgba(0,90,200,0.95);stroke-width:0.45}
+  .paper-plane-bottom{fill:var(--brand-blue);stroke:rgba(0,70,160,0.95);stroke-width:0.45}
+  .paper-plane-highlight{fill:#e6f2ff;opacity:0.95}
+  .stop-pill{position:absolute;transform:translate(-50%,-50%);padding:8px 16px;border-radius:12px;font-size:14px;font-weight:800;white-space:nowrap;background:rgba(10,12,10,0.9);border:1px solid rgba(243,139,54,0.12);color:#fff;transition:box-shadow .35s ease,transform .35s ease,border-color .35s ease}
+  .stop-pill.boost{border-color:var(--brand-orange);box-shadow:0 6px 18px rgba(243,139,54,0.06);transform:translate(-50%,-50%) scale(1.04)}
+
+  /* ============================= FOOTER (EDC brand) ============================= */
+  .edc-footer{background:var(--brand-black);border-radius:12px;margin:0 14px 14px;padding:22px;display:grid;grid-template-columns:0.98fr 3.75fr 5.35fr;gap:18px;min-height:640px;color:var(--cream);} 
+  .hover-lift{transition:transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease, box-shadow .35s ease;}
+  .hover-lift:hover{transform:translateY(-3px);filter:brightness(1.04);box-shadow:0 14px 30px rgba(0,0,0,0.18);}
+  .col-nav{display:flex;flex-direction:column;gap:12px;height:100%;}
+  .logo-block{padding:4px 2px 6px;}
+  .f-logo{font-family:'Archivo Black',sans-serif;font-size:26px;line-height:1;letter-spacing:-0.5px;}
+  .f-tagline{font-size:8.5px;font-weight:700;letter-spacing:0.6px;margin-top:4px;color:var(--green-deep);text-transform:uppercase;}
+  .nav-card{border-radius:16px;padding:14px 14px 12px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+  .nav-card--blue{background:var(--blue);color:#fff;flex:1.5;}
+  .nav-card--yellow{background:var(--yellow);color:var(--ink);flex:1;}
+  .nav-card--orange{background:var(--orange);color:#fff;flex:1;}
+  .nav-card--outline{background:transparent;border:1.5px solid rgba(255,255,255,0.06);color:var(--cream);flex:0.72;}
+  .nav-card-top{display:flex;align-items:flex-start;justify-content:space-between;font-family:'Archivo Black',sans-serif;font-size:13px;}
+  .nav-card-top svg{width:16px;height:16px;}
+  .nav-card-label{font-family:'Archivo Black',sans-serif;font-size:15px;line-height:1.1;}
+  .btn-join{background:var(--purple);color:#fff;border-radius:999px;padding:12px 10px;font-family:'Archivo Black',sans-serif;font-size:12.5px;text-align:center;width:100%;border:none;cursor:pointer;}
+  .social-row{display:flex;gap:7px;}
+  .social-btn{background:rgba(255,255,255,0.06);width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .social-btn svg{width:15px;height:15px;fill:#fff;}
+  .col-map{display:flex;flex-direction:column;gap:12px;height:100%;min-width:0;}
+  .connect-box{background:var(--purple);color:#fff;border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;flex:1;}
+  .connect-title{font-family:'Archivo Black',sans-serif;font-size:22px;line-height:1.1;}
+  .connect-socials{display:flex;gap:9px;margin-top:16px;}
+  .connect-socials a{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;}
+  .connect-socials svg{width:16px;height:16px;stroke:#fff;fill:none;}
+  .brand-card{background:var(--cream);border-radius:22px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;justify-content:center;}
+  .brand-card .f-logo{color:var(--ink);}
+  .brand-contact{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;}
+  .col-map-bottom{display:flex;gap:12px;flex:1.1;}
+  .map-card{position:relative;flex:1.4;border-radius:22px;overflow:hidden;background:#07090a;min-height:220px;}
+  .map-svg{width:100%;height:100%;display:block;}
+  .india-land{fill:url(#landGrad);stroke:var(--brand-blue);stroke-width:1;stroke-linejoin:round;opacity:0.95;}
+  .map-tooltip{position:absolute;right:18px;top:18px;transform:none;background:var(--brand-blue);color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:999px;white-space:nowrap;}
+  .map-badge{position:absolute;left:14px;bottom:14px;font-size:10px;font-weight:700;letter-spacing:0.4px;color:#cfe;}
+  .pulse-ring{transform-origin:158px 110px;animation:pulse 2.6s ease-out infinite;}
+  .pulse-ring--2{animation-delay:1.3s;}
+  @keyframes pulse{0%{transform:scale(.35);opacity:.9;}70%{transform:scale(2.2);opacity:0;}100%{transform:scale(2.2);opacity:0;}}
+  .col-form{min-width:0;}
+  .form-card{background:var(--ink);color:#fff;border-radius:26px;padding:30px 28px;height:100%;display:flex;flex-direction:column;}
+  .contact-pill{background:rgba(255,255,255,0.1);color:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:700;width:fit-content;}
+  .form-heading{font-family:'Archivo Black',sans-serif;font-size:26px;line-height:1.15;margin-top:18px;}
+  .form-sub{font-size:13.5px;color:rgba(255,255,255,0.55);margin-top:10px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field.full{margin-top:14px;}
+  .field label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.4px;}
+  .field input,.field textarea{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:10px 12px;color:#fff;font-family:inherit;font-size:13.5px;}
+  .field textarea{resize:vertical;min-height:70px;}
+  .form-footer{margin-top:20px;display:flex;flex-direction:column;gap:14px;}
+  .checks label{display:flex;gap:8px;font-size:11.5px;color:rgba(255,255,255,0.5);align-items:flex-start;margin-bottom:8px;line-height:1.4;}
+  .send-btn{align-self:flex-start;background:var(--green);color:#04170a;border-radius:999px;padding:13px 26px;font-weight:800;font-size:13.5px;display:flex;align-items:center;gap:8px;border:none;}
+  .send-btn svg{width:14px;height:14px;stroke:#04170a;}
+  @media (max-width:980px){
+    .edc-footer{grid-template-columns:1fr;min-height:0;display:flex;flex-direction:column;}
+    .col-nav{order:1;flex-direction:row;flex-wrap:wrap;}
+    .col-form{order:2;}
+    .col-map{order:3;}
+    .nav-card{flex:1 1 21%;min-height:110px;}
+    .col-map-bottom{flex-direction:column;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- card back artwork defs (used by deck cards) -->
+  <svg style="position:absolute;width:0;height:0;pointer-events:none;" aria-hidden="true">
+    <defs>
+      <symbol id="cardBackArt" viewBox="0 0 230 322">
+        <g stroke="#ffffff" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
+          <rect x="10" y="10" width="210" height="302" rx="10"/>
+          <rect x="18" y="18" width="194" height="286" rx="7"/>
+          <path d="M18 46 A28 28 0 0 1 46 18"/>
+          <path d="M212 46 A28 28 0 0 0 184 18"/>
+          <path d="M18 276 A28 28 0 0 0 46 304"/>
+          <path d="M212 276 A28 28 0 0 1 184 304"/>
+          <line x1="46" y1="18" x2="115" y2="161"/>
+          <line x1="184" y1="18" x2="115" y2="161"/>
+          <line x1="46" y1="304" x2="115" y2="161"/>
+          <line x1="184" y1="304" x2="115" y2="161"/>
+          <line x1="115" y1="34" x2="115" y2="118" stroke-dasharray="1 7"/>
+          <line x1="115" y1="204" x2="115" y2="288" stroke-dasharray="1 7"/>
+          <circle cx="115" cy="34" r="10"/>
+          <circle cx="115" cy="288" r="10"/>
+          <g fill="#ffffff" stroke="none">
+            <circle cx="27" cy="70" r="2.4"/>
+            <circle cx="27" cy="90" r="2.4"/>
+            <circle cx="27" cy="110" r="2.4"/>
+            <circle cx="203" cy="70" r="2.4"/>
+            <circle cx="203" cy="90" r="2.4"/>
+            <circle cx="203" cy="110" r="2.4"/>
+            <circle cx="27" cy="212" r="2.4"/>
+            <circle cx="27" cy="232" r="2.4"/>
+            <circle cx="27" cy="252" r="2.4"/>
+            <circle cx="203" cy="212" r="2.4"/>
+            <circle cx="203" cy="232" r="2.4"/>
+            <circle cx="203" cy="252" r="2.4"/>
+          </g>
+          <path d="M70 145 L88 161 L70 177 Z" stroke-linejoin="round"/>
+          <path d="M160 145 L142 161 L160 177 Z" stroke-linejoin="round"/>
+          <line x1="80" y1="120" x2="92" y2="132" stroke-width="2.4"/>
+          <line x1="150" y1="120" x2="138" y2="132" stroke-width="2.4"/>
+          <path d="M115 118 C132 118 138 132 152 132 C152 148 138 152 138 161 C138 174 152 178 152 194 C138 194 132 208 115 208 C98 208 92 194 78 194 C78 178 92 174 92 161 C92 152 78 148 78 132 C92 132 98 118 115 118 Z" fill="#0a0a0a"/>
+          <circle cx="115" cy="161" r="22" fill="#0a0a0a" stroke="#f38b36" stroke-width="1.4"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ============================= NAVBAR ============================= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-logo"><span class="mark">e</span>EDC · NITD</div>
+    <div class="nav-center">
+      <div class="nav-links" id="navLinks">
+        <a href="#about" data-target="about">About</a>
+        <a href="#programs" data-target="programs">Programs</a>
+        <a href="#journey" data-target="journey">Journey</a>
+        <a href="#contact" data-target="contact">Contact</a>
+      </div>
+      <div class="nav-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+    <a href="#contact" class="nav-cta">Join EDC</a>
+  </nav>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-top">
+        <div class="hero-copy">
+          <span class="eyebrow">NIT Durgapur · Est. entrepreneurship cell</span>
+          <h1>Ideate. Innovate.<br><span class="accent">Incubate.</span></h1>
+          <p class="hero-sub">The Entrepreneurship Development Cell turns campus ideas into ventures — through mentorship, funding pathways, and a community that ships instead of just pitches.</p>
+          <div class="hero-actions">
+            <a href="#programs" class="btn btn-primary">Explore Programs →</a>
+            <a href="#about" class="btn btn-ghost">About EDC</a>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><b>120+</b><span>Startups mentored</span></div>
+          <div class="stat"><b>15</b><span>Flagship events</span></div>
+          <div class="stat"><b>₹2Cr+</b><span>Funding facilitated</span></div>
+        </div>
+      </div>
+
+      <div class="hero-collage">
+        <div class="collage-cell"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=600&auto=format&fit=crop" alt="Speaker at EDC event"><span class="collage-tag">E-Summit '26</span></div>
+        <div class="collage-cell"><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=600&auto=format&fit=crop" alt="Panel discussion"><span class="collage-tag">Founder Talks</span></div>
+        <div class="collage-cell"><img src="https://images.unsplash.com/photo-1560439514-4e9645039924?q=80&w=600&auto=format&fit=crop" alt="Workshop session"><span class="collage-tag">Bootcamp</span></div>
+        <div class="collage-cell"><img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=600&auto=format&fit=crop" alt="Team collaboration"><span class="collage-tag">SOTM</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= MARQUEE ============================= -->
+  <div class="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <!-- ============================= ABOUT ============================= -->
+  <section class="about" id="about">
+    <div class="wrap about-grid">
+      <div>
+        <span class="eyebrow" style="color:var(--green-deep);">Who we are</span>
+        <h2>Built by students, for the next founder on campus.</h2>
+        <p class="about-lead">The Entrepreneurship Development Cell, NIT Durgapur is the institution’s official Entrepreneurship Promoting student body. Through a plethora of initiatives throughout the year, we remain steadfast to our sole dream of creating a sustainable and diverse entrepreneurial ecosystem where the young and the elderly come together to make entrepreneurship a common reality in India.</p>
+      </div>
+      <div class="about-list">
+        <div class="about-row"><span class="num">01</span><h3>Ideate</h3><p>Ideation sprints, design-thinking workshops, and founder AMAs that sharpen a raw idea.</p></div>
+        <div class="about-row"><span class="num">02</span><h3>Innovate</h3><p>Hands-on bootcamps, hackathons, and case competitions that pressure-test the build.</p></div>
+        <div class="about-row"><span class="num">03</span><h3>Incubate</h3><p>Mentorship, seed-funding connects, and IIC support to take a venture live.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= PROGRAMS (deck cards) ============================= -->
+  <section class="programs" id="programs">
+    <div class="scroll-section" id="scrollSection">
+      <div class="sticky">
+        <div class="heading-wrap">
+          <div class="headline-big" id="headlineBig">PROGRAMS</div>
+          <h2 class="headline-small" id="headlineSmall" style="opacity:0;color:var(--cream);">What we<br>run, every year</h2>
+          <div class="tagline" id="tagline">FOUR PILLARS THAT CARRY A STUDENT FROM FIRST IDEA TO FIRST CUSTOMER.</div>
+        </div>
+        <div class="stage" id="stage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= JOURNEY / TIMELINE ============================= -->
+  <section class="journey" id="journey">
+    <div class="wrap journey-head">
+      <span class="eyebrow">The roadmap</span>
+      <h2>One year at EDC, mapped out.</h2>
+      <p>From onboarding to the summit stage — how a member's year with EDC actually unfolds.</p>
+    </div>
+
+    <div class="timeline-section" id="timelineSection">
+      <svg class="timeline-svg" viewBox="0 0 1536 480" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path id="timelinePath" class="timeline-path" d="
+          M -20,265 C 40,238 120,226.2 170,216 C 190,178.2 130,142.2 200,134.4
+          C 262,128.4 302,158.4 262,188.4 C 236,202.8 222,208.8 215,213
+          C 262,224.4 300,214.8 340,208.8 C 400,202.8 460,208.8 522,213
+          C 600,220.2 660,242.4 720,260.4 C 760,268.8 792,273 814,275
+          C 852,265.2 902,217.2 952,175.2 C 1000,139.2 1050,120 1090,112.8
+          C 1130,106.8 1160,126 1140,151.2 C 1126,163.2 1130,166.8 1137,169
+          C 1180,181.2 1230,199.2 1280,208.2 C 1320,216 1345,220.2 1367,223
+          C 1400,228 1440,217.2 1480,220.2 C 1510,222 1530,224.4 1556,222
+        "/>
+        <line class="stem-line" x1="215" y1="213" x2="215" y2="303"/>
+        <line class="stem-line" x1="522" y1="213" x2="522" y2="303"/>
+        <line class="stem-line" x1="814" y1="275" x2="814" y2="365"/>
+        <line class="stem-line" x1="1137" y1="169" x2="1137" y2="259"/>
+        <line class="stem-line" x1="1367" y1="223" x2="1367" y2="313"/>
+        <g>
+          <circle class="marker-ring" cx="215" cy="213" r="7"/><circle class="marker-dot" cx="215" cy="213" r="2.6"/>
+          <circle class="marker-ring" cx="522" cy="213" r="7"/><circle class="marker-dot" cx="522" cy="213" r="2.6"/>
+          <circle class="marker-ring" cx="814" cy="275" r="7"/><circle class="marker-dot" cx="814" cy="275" r="2.6"/>
+          <circle class="marker-ring" cx="1137" cy="169" r="7"/><circle class="marker-dot" cx="1137" cy="169" r="2.6"/>
+          <circle class="marker-ring" cx="1367" cy="223" r="7"/><circle class="marker-dot" cx="1367" cy="223" r="2.6"/>
+        </g>
+        <g id="plane" class="paper-plane">
+          <!-- improved paper-plane silhouette from timeline-paper-plane.html (keeps existing CSS class names) -->
+          <path class="paper-plane-top" d="M -28,12 L 0,0 L -28,-12 L -28,-3 L -8,0 L -28,3 Z"/>
+          <path class="paper-plane-bottom" d="M -28,-3 L -8,0 L -28,3 Z"/>
+        </g>
+      </svg>
+      <div class="timeline-bg"></div>
+
+      <div class="stop-pill" id="pill-1" style="left:14.0%; top:63.1%;">Onboarding</div>
+      <div class="stop-pill" id="pill-2" style="left:34.0%; top:63.1%;">Bootcamp</div>
+      <div class="stop-pill" id="pill-3" style="left:53.0%; top:76.0%;">Hackathon</div>
+      <div class="stop-pill" id="pill-4" style="left:74.0%; top:54.0%;">Mentorship</div>
+      <div class="stop-pill" id="pill-5" style="left:89.0%; top:65.2%;">E-Summit</div>
+    </div>
+  </section>
+
+  <!-- ============================= FOOTER ============================= -->
+  <footer class="edc-footer" id="contact">
+    <div class="col-nav">
+      <div class="logo-block"><div class="f-logo">EDC<span class="dot">.</span></div><div class="f-tagline">Entrepreneurship Development Cell · NITD</div></div>
+      <a class="nav-card nav-card--blue hover-lift" href="#about"><div class="nav-card-top"><span>01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></div><div class="nav-card-label">About Us</div></a>
+      <a class="nav-card nav-card--yellow hover-lift" href="#programs"><div class="nav-card-top"><span>02</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></div><div class="nav-card-label">Programs</div></a>
+      <a class="nav-card nav-card--orange hover-lift" href="#journey"><div class="nav-card-top"><span>03</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></div><div class="nav-card-label">Journey</div></a>
+      <a class="nav-card nav-card--outline hover-lift" href="#contact"><div class="nav-card-top"><span>04</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></div><div class="nav-card-label">Contact</div></a>
+      <button class="btn-join hover-lift">Join EDC</button>
+      <div class="social-row">
+        <a class="social-btn hover-lift" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c2.7 0 3 0 4.1.06 1.1.05 1.8.22 2.4.46.6.24 1.1.56 1.6 1.06.5.5.82 1 1.06 1.6.24.6.4 1.3.46 2.4.05 1.1.06 1.4.06 4.1s0 3-.06 4.1c-.05 1.1-.22 1.8-.46 2.4a4.3 4.3 0 0 1-1.06 1.6 4.3 4.3 0 0 1-1.6 1.06c-.6.24-1.3.4-2.4.46-1.1.05-1.4.06-4.1.06s-3 0-4.1-.06c-1.1-.05-1.8-.22-2.4-.46a4.3 4.3 0 0 1-1.6-1.06 4.3 4.3 0 0 1-1.06-1.6c-.24-.6-.4-1.3-.46-2.4C2.2 15 2.2 14.7 2.2 12s0-3 .06-4.1c.05-1.1.22-1.8.46-2.4.24-.6.56-1.1 1.06-1.6.5-.5 1-.82 1.6-1.06.6-.24 1.3-.4 2.4-.46C8.9 2.2 9.3 2.2 12 2.2Zm0 1.8c-2.66 0-2.97 0-4.02.06-.9.04-1.4.19-1.72.32-.43.17-.74.37-1.07.7-.33.33-.53.64-.7 1.07-.13.32-.28.82-.32 1.72C4.1 9.03 4.1 9.34 4.1 12s0 2.97.06 4.02c.04.9.19 1.4.32 1.72.17.43.37.74.7 1.07.33.33.64.53 1.07.7.32.13.82.28 1.72.32 1.05.05 1.36.06 4.02.06s2.97 0 4.02-.06c.9-.04 1.4-.19 1.72-.32.43-.17.74-.37 1.07-.7.33-.33.53-.64.7-1.07.13-.32.28-.82.32-1.72.05-1.05.06-1.36.06-4.02s0-2.97-.06-4.02c-.04-.9-.19-1.4-.32-1.72a2.9 2.9 0 0 0-.7-1.07 2.9 2.9 0 0 0-1.07-.7c-.32-.13-.82-.28-1.72-.32C14.97 4.1 14.66 4.1 12 4.1Zm0 3.4a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 1.8a2.7 2.7 0 1 0 0 5.4 2.7 2.7 0 0 0 0-5.4Zm4.7-2.9a1.05 1.05 0 1 1 0 2.1 1.05 1.05 0 0 1 0-2.1Z"/></svg></a>
+        <a class="social-btn hover-lift" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path fill="#000" d="M7.5 9.8h2.4v7.4H7.5zM8.7 8.6a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8zM11.4 9.8h2.3v1h.03c.32-.6 1.1-1.24 2.27-1.24 2.43 0 2.88 1.6 2.88 3.68v3.96h-2.4v-3.5c0-.84 0-1.9-1.17-1.9s-1.35.92-1.35 1.9v3.5h-2.4z"/></svg></a>
+        <a class="social-btn hover-lift" href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.8 8.1s-.2-1.5-.8-2.1c-.8-.8-1.7-.8-2.1-.9C15.9 5 12 5 12 5s-3.9 0-6.9.1c-.4 0-1.3.1-2.1.9-.6.6-.8 2.1-.8 2.1S2 9.8 2 11.6v1.4c0 1.8.2 3.5.2 3.5s.2 1.5.8 2.1c.8.8 1.9.8 2.3.9C7 19.6 12 19.6 12 19.6s3.9 0 6.9-.1c.4 0 1.3-.1 2.1-.9.6-.6.8-2.1.8-2.1s.2-1.7.2-3.5v-1.4c0-1.8-.2-3.5-.2-3.5ZM9.9 15.1V9.1l5.6 3-5.6 3Z"/></svg></a>
+      </div>
+    </div>
+
+    <div class="col-map">
+      <div class="map-card hover-lift">1
+        <svg class="map-svg" viewBox="0 0 280 320" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="landGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0b63b8"/><stop offset="100%" stop-color="#063f9a"/></linearGradient>
+            <radialGradient id="pulseGrad" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3aa0ff" stop-opacity="0.85"/><stop offset="70%" stop-color="#1f6fbf" stop-opacity="0.35"/><stop offset="100%" stop-color="#1f6fbf" stop-opacity="0"/></radialGradient>
+          </defs>
+          <path class="india-land" d="M100,5 L130,10 L160,25 L185,20 L205,35 L215,45 L255,55 L270,90 L250,110 L215,95 L225,130 L205,150 L190,190 L175,230 L165,270 L140,310 L115,295 L95,260 L78,220 L68,180 L55,140 L35,120 L45,95 L60,80 L70,50 L85,25 Z"/>
+          <ellipse class="pulse-ring" cx="185" cy="140" rx="8" ry="4" fill="url(#pulseGrad)"/>
+          <ellipse class="pulse-ring pulse-ring--2" cx="185" cy="140" rx="8" ry="4" fill="url(#pulseGrad)"/>
+          <circle cx="185" cy="140" r="2.6" fill="#eaf5ff"/>
+          <circle cx="185" cy="140" r="4.4" fill="none" stroke="#5fb4ff" stroke-width="0.8"/>
+        </svg>
+        <div class="map-tooltip">Durgapur, WB</div>
+        <div class="map-badge">India</div>
+      </div>
+      <div class="col-map-bottom">
+        <div class="connect-box hover-lift">
+          <div class="connect-title">Let's<br>Connect!</div>
+          <div class="connect-socials">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/></svg></a>
+          </div>
+        </div>
+        <div class="brand-card hover-lift">
+          <div class="f-logo">EDC<span class="dot">.</span></div>
+          <div class="brand-contact"><a href="mailto:edc@nitdgp.ac.in">edc@nitdgp.ac.in</a><a href="tel:+913432546000">+91 343 254 6000</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-form">
+      <div class="form-card">
+        <button class="contact-pill">Contact</button>
+        <h2 class="form-heading">Any questions?<br>We're here to answer!</h2>
+        <p class="form-sub">Complete the form and our team will get back to you shortly.</p>
+        <form onsubmit="return false;">
+          <div class="form-row">
+            <div class="field"><label>Name *</label><input type="text" required/></div>
+            <div class="field"><label>Roll No. *</label><input type="text" required/></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>Email *</label><input type="email" required/></div>
+            <div class="field"><label>Phone *</label><input type="tel" required/></div>
+          </div>
+          <div class="field full"><label>Message *</label><textarea placeholder="Tell us what you're building" required></textarea></div>
+          <div class="form-footer">
+            <div class="checks"><label><input type="checkbox" required/> I accept the Terms of Use and Privacy Policy of EDC.</label></div>
+            <button class="send-btn hover-lift" type="submit">Send <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  /* ---------- custom cursor ---------- */
+  const ring=document.getElementById('cursorRing'), dot=document.getElementById('cursorDot');
+  let mouseX=innerWidth/2, mouseY=innerHeight/2, ringX=mouseX, ringY=mouseY, dotX=mouseX, dotY=mouseY, active=false;
+  addEventListener('mousemove', e=>{mouseX=e.clientX;mouseY=e.clientY; if(!active){active=true;ring.classList.add('active');dot.classList.add('active');ringX=dotX=mouseX;ringY=dotY=mouseY;}});
+  addEventListener('mouseleave', ()=>{active=false;ring.classList.remove('active');dot.classList.remove('active');});
+  (function loop(){ ringX+=(mouseX-ringX)*0.22; ringY+=(mouseY-ringY)*0.22; dotX+=(mouseX-dotX)*0.12; dotY+=(mouseY-dotY)*0.12;
+    ring.style.transform=`translate(${ringX}px,${ringY}px) translate(-50%,-50%)`; dot.style.transform=`translate(${dotX}px,${dotY}px) translate(-50%,-50%)`;
+    requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,input,textarea').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ring.classList.add('hovering');dot.classList.add('hovering');});
+    el.addEventListener('mouseleave',()=>{ring.classList.remove('hovering');dot.classList.remove('hovering');});
+  });
+
+  /* ---------- navbar condense + scrollspy ---------- */
+  const navbar=document.getElementById('navbar'), navLinks=document.querySelectorAll('#navLinks a');
+  const sections=[...document.querySelectorAll('section[id]')];
+  let scrollTimeout=null;
+  function updateActive(){
+    const ref=scrollY+140; let current=null;
+    sections.forEach(s=>{ if(ref>=s.offsetTop) current=s.id; });
+    navLinks.forEach(a=>a.classList.toggle('active', a.dataset.target===current));
+  }
+  addEventListener('scroll', ()=>{
+    if(!navbar.classList.contains('condensed')) navbar.classList.add('condensed');
+    clearTimeout(scrollTimeout);
+    scrollTimeout=setTimeout(()=>{ navbar.classList.remove('condensed'); updateActive(); }, 200);
+  }, {passive:true});
+  document.querySelectorAll('#navLinks a').forEach(a=>{
+    a.addEventListener('click', e=>{ e.preventDefault(); document.getElementById(a.dataset.target)?.scrollIntoView({behavior:'smooth'}); });
+  });
+  updateActive();
+
+  /* ---------- marquee content ---------- */
+  const items=['E-Summit','Founder Talks','Bootcamp','Hackathon','SOTM','Mentorship','IIC','Ideate · Innovate · Incubate'];
+  const track=document.getElementById('marqueeTrack');
+  track.innerHTML = (items.concat(items)).map(t=>`<span>${t}</span>`).join('');
+
+  /* ---------- deck cards (programs) ---------- */
+  const badges = {
+    B: `<rect x="1" y="1" width="12" height="12" fill="#f38b36"/><rect x="15" y="15" width="12" height="12" fill="#f38b36"/><rect x="15" y="1" width="12" height="12" fill="#111"/><rect x="1" y="15" width="12" height="12" fill="#111"/>`,
+    H: `<path d="M14 2 A12 12 0 0 0 14 26" stroke="#f38b36" stroke-width="4" fill="none"/><path d="M20 8 A7 7 0 0 0 20 20" stroke="#111" stroke-width="4" fill="none"/>`,
+    M: `<rect x="2" y="2" width="24" height="6" fill="#111"/><rect x="11" y="8" width="6" height="18" fill="#f38b36"/>`,
+    S: `<rect x="4" y="2" width="6" height="24" fill="#111"/><path d="M10 3 L24 8 L10 15 Z" fill="#f38b36"/>`
+  };
+  function badgeSvg(letter){ return `<svg viewBox="0 0 28 28" aria-hidden="true">${badges[letter]||''}</svg>`; }
+
+  const cardsData=[
+    {letter:'B', title:'BOOTCAMPS', items:['Idea Validation','Lean Canvas','MVP Sprints','Pitch Practice','Founder AMAs']},
+    {letter:'H', title:'HACKATHONS', items:['48-hr Build Sprints','Cross-college Teams','Domain Tracks','Judge Mentoring','Demo Day']},
+    {letter:'M', title:'MENTORSHIP', items:['Alumni Founders','1:1 Office Hours','Industry Experts','Legal & Finance Help','Growth Playbooks']},
+    {letter:'S', title:'E-SUMMIT', items:['Keynote Speakers','Startup Expo','Investor Panels','Networking Mixers','Award Night']}
+  ];
+  const stage=document.getElementById('stage');
+  cardsData.forEach((data,i)=>{
+    const card=document.createElement('div'); card.className='card'; card.dataset.index=i;
+    card.innerHTML=`
+      <div class="card-inner">
+        <div class="face face-back"><svg viewBox="0 0 230 322" aria-hidden="true"><use href="#cardBackArt"/></svg></div>
+        <div class="face face-front">
+          <div class="front-top"><div class="front-title">${data.title}</div><div class="badge">${badgeSvg(data.letter)}</div></div>
+          <div class="front-list">${data.items.map(it=>`<span class="item">${it}</span>`).join('')}</div>
+          <div class="front-bottom"><div class="badge">${badgeSvg(data.letter)}</div><div class="front-title" style="font-size:14px;">${data.title}</div></div>
+        </div>
+      </div>`;
+    stage.appendChild(card);
+  });
+  const cardEls=[...stage.querySelectorAll('.card')];
+  const stackState=[{x:-5,y:-9,rot:-6},{x:-2,y:-4,rot:-2},{x:2,y:0,rot:2},{x:6,y:5,rot:6}];
+  const spreadRot=[-6,-2,2,6];
+  let spreadState=[];
+  function computeSpread(){
+    const cardW=innerWidth<=640?172:230;
+    const maxSpan=Math.min(innerWidth*0.92, cardW*4.35);
+    const step=maxSpan/3.6;
+    const positions=[-1.5,-0.5,0.5,1.5].map(m=>m*step);
+    spreadState=positions.map((x,i)=>({x,y:0,rot:spreadRot[i]}));
+  }
+  computeSpread();
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function ease(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+  const section=document.getElementById('scrollSection'), headlineBig=document.getElementById('headlineBig'),
+        headlineSmall=document.getElementById('headlineSmall'), tagline=document.getElementById('tagline');
+  const startTime=performance.now(), hoverPhase=[0,1.3,2.6,3.9];
+  function update(){
+    const now=performance.now(), t=(now-startTime)/1000;
+    const rect=section.getBoundingClientRect();
+    const scrollable=rect.height-innerHeight;
+    const progress=clamp(scrollable>0?(-rect.top)/scrollable:0,0,1);
+    // gentler reveal timing for smoother motion
+    const delayStep=0.08, duration=0.8;
+    cardEls.forEach((card,i)=>{
+      const local=clamp((progress-i*delayStep)/duration,0,1);
+      const eased=ease(local);
+      const s0=stackState[i], s1=spreadState[i];
+      const x=lerp(s0.x,s1.x,eased), y=lerp(s0.y,s1.y,eased), rot=lerp(s0.rot,s1.rot,eased), rotY=lerp(0,180,eased);
+      const hoverAmount=eased, phase=hoverPhase[i];
+      // reduced amplitude and slower bobbing for a calmer, smoother feel
+      const hoverY=Math.sin(t*0.7+phase)*4*hoverAmount, hoverRot=Math.sin(t*0.5+phase)*0.6*hoverAmount;
+      card.style.zIndex=10+i;
+      card.style.transform=`translate(${x}px,${y+hoverY}px) rotate(${rot+hoverRot}deg)`;
+      card.querySelector('.card-inner').style.transform=`rotateY(${rotY}deg)`;
+    });
+    headlineBig.style.opacity=clamp(1-progress/0.14,0,1);
+    headlineBig.style.transform=`translate(-50%,-50%) scale(${lerp(1,0.86,clamp(progress/0.14,0,1))})`;
+    const smallT=clamp((progress-0.22)/0.2,0,1);
+    headlineSmall.style.opacity=smallT;
+    headlineSmall.style.transform=`translateY(${lerp(14,0,smallT)}px)`;
+    tagline.classList.toggle('show', progress>0.26);
+    requestAnimationFrame(update);
+  }
+  addEventListener('resize', computeSpread);
+  requestAnimationFrame(update);
+
+  /* ---------- paper plane timeline ---------- */
+  const path=document.getElementById('timelinePath'), plane=document.getElementById('plane');
+  const totalLength=path.getTotalLength();
+  const DURATION=12000, PLANE_SCALE=2.0;
+  const stops=[
+    {el:document.getElementById('pill-1'),x:215,y:213,visited:false},
+    {el:document.getElementById('pill-2'),x:522,y:213,visited:false},
+    {el:document.getElementById('pill-3'),x:814,y:275,visited:false},
+    {el:document.getElementById('pill-4'),x:1137,y:169,visited:false},
+    {el:document.getElementById('pill-5'),x:1367,y:223,visited:false},
+  ];
+  const TRIGGER_RADIUS=95;
+  let start=null, prevElapsed=0, smoothX=null, smoothY=null, smoothAngle=0, inited=false;
+  function lerpAngle(a,b,t){ let diff = ((b - a + 540) % 360) - 180; return a + diff * t; }
+  function frame(ts){
+    if(start===null) start=ts;
+    const elapsed=(ts-start)%DURATION;
+    // loop wrap: reset visited state so pills can light again next loop
+    if(elapsed < prevElapsed){ for(const s of stops){ s.visited=false; s.el.classList.remove('boost'); } }
+    prevElapsed = elapsed;
+    const t=elapsed/DURATION, length=t*totalLength;
+    const point=path.getPointAtLength(length), ahead=path.getPointAtLength(Math.min(length+18,totalLength));
+    const targetAngle=Math.atan2(ahead.y-point.y, ahead.x-point.x)*180/Math.PI;
+    if(!inited){ smoothX=point.x; smoothY=point.y; smoothAngle=targetAngle; inited=true; }
+    else{ smoothX += (point.x - smoothX)*0.18; smoothY += (point.y - smoothY)*0.18; smoothAngle = lerpAngle(smoothAngle, targetAngle, 0.12); }
+    plane.setAttribute('transform', `translate(${smoothX},${smoothY}) rotate(${smoothAngle}) scale(${PLANE_SCALE})`);
+    for(const s of stops){ if(s.visited) continue; const dist=Math.hypot(smoothX-s.x, smoothY-s.y); if(dist < TRIGGER_RADIUS){ s.visited=true; s.el.classList.add('boost'); } }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
