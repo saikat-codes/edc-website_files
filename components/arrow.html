@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameplan Arrow</title>
+<style>
+:root {
+    --color-light-50: #b08bff;
+    --color-dark: #181818;
+}
+
+html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--color-dark);
+}
+
+gameplan-arrow-wrapper {
+    position: relative;
+}
+
+.gameplan-arrow {
+    width: 1.75em;
+    height: auto;
+    top: 23%;
+    left: -40px;
+    color: var(--color-light-50);
+    pointer-events: none;
+}
+
+.gameplan-arrow.second {
+    top: auto;
+    bottom: 23%;
+}
+</style>
+</head>
+<body>
+
+<div class="gameplan-arrow-wrapper position-relative">
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        viewBox="0 0 30 159"
+        fill="none"
+        class="gameplan-arrow d-none d-md-block position-absolute"
+        aria-hidden="true"
+    >
+        <path
+            d="M27.018 158.927C29.0184 158.933 29.89 157.153 29.1516 155.44C28.2884 152.415 27.7564 149.335 27.2962 146.252C26.1739 140.062 25.6803 133.819 24.7443 127.617C24.8027 127.439 24.707 127.221 24.5131 127.139C23.0792 126.556 23.0827 130.698 22.9428 131.597C22.804 135.918 23.0896 140.274 23.6007 144.618C16.2987 128.309 10.0491 111.467 7.9099 94.0127C4.2459 63.7526 11.0006 28.0353 23.0763 0.861105C23.3045 0.752367 23.4042 0.387973 23.0883 0.221706C22.1895 -0.161509 21.2971 0.934123 20.7696 1.478C8.2934 18.1502 3.32462 45.726 1.45976 66.4468C-0.200065 83.8873 1.21319 101.862 6.89223 118.98C10.3023 128.888 14.5789 138.549 19.244 148.038C15.4446 144.935 11.5588 141.929 7.49022 139.162C4.88906 137.548 2.36665 140.949 4.71726 142.881C6.63163 144.342 8.51723 145.842 10.3316 147.418C13.7618 150.315 22.8512 158.896 27.0248 158.922L27.018 158.927Z"
+            fill="var(--color-light-50)"
+        />
+    </svg>
+</div>
+
+</body>
+</html>
